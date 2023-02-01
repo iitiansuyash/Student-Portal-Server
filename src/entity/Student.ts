@@ -4,7 +4,6 @@ import { User } from "./User";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 
-
 export enum Gender {
     MALE = "male",
     FEMALE = "female",
