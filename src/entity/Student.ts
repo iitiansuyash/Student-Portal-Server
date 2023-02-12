@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn } from "typeorm"
 import { IsNotEmpty } from "class-validator";
-import { User } from "./User";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
+import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
 
 export enum Gender {
     MALE = "male",
@@ -35,10 +35,6 @@ export class Student {
     @IsNotEmpty()
     @Column("varchar", { length: 45 })
     public last_name: string
-
-    @IsNotEmpty()
-    @OneToOne(() => User, (user) => user.student, { eager: true })
-    public user: User
 
     @IsNotEmpty()
     @Column("varchar", { length: 6 })
@@ -78,15 +74,15 @@ export class Student {
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
-    public isPWD: Number
+    public isPWD: number
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
-    public isEWS: Number
+    public isEWS: number
 
     @IsNotEmpty()
     @Column({ type: 'int', default: 0 })
-    public permissions: Number
+    public permissions: number
 
     @IsNotEmpty()
     @Column("varchar", { length: 45 })
@@ -97,10 +93,13 @@ export class Student {
     public uidValue: string
 
     @OneToMany(() => Student_cvs, (cv) => cv.student)
-    cvs: Student_cvs[]
-    
+    public cvs: Student_cvs[]
+
     @OneToMany(() => Student_Studies_Spec, (cv) => cv.student)
-    specializations: Student_Studies_Spec[]
+    public specializations: Student_Studies_Spec[]
+
+    @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
+    public placementcycles: Placement_Cycle_Enrolment[];
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     public createdAt: Date;

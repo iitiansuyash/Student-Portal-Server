@@ -1,39 +1,38 @@
-import { User } from "../entity/User";
-import { userRepository } from "../repositories/user.repository"
+import { Student } from "../entity/Student";
+import { studentRepository } from "../repositories/student.repository"
 
 interface Query {
-    id?: string;
-    name?: string;
+    admno?: string;
     email?: string
 }
 
-export const findAll = async () : Promise<User[] | undefined> => {
-    return await userRepository.find();
+export const findAll = async () : Promise<Student[] | undefined> => {
+    return await studentRepository.find();
 }
 
-export const findByQuery = async (query: Query) : Promise<User | undefined> => {
-    return await userRepository.findOne({ where: query });
+export const findByQuery = async (query: Query) : Promise<Student | undefined> => {
+    return await studentRepository.findOne({ where: query });
 }
 
-export const fetchUser = async (id: string): Promise<User | undefined> => {
-    return await userRepository.findOneBy({ id });
+export const fetchUser = async (admno: string): Promise<Student | undefined> => {
+    return await studentRepository.findOneBy({ admno });
 }
 
-export const create = async (user: User): Promise<User> => {
-    return await userRepository.save(user);
+export const create = async (user: Student): Promise<Student> => {
+    return await studentRepository.save(user);
 }
 
-export const update = async (id: string, user: User): Promise<User> => {
-    let updatedUser = { ...user, updatedAt: new Date() };
-    await userRepository.update({ id }, updatedUser);
-    return await fetchUser(id);
+export const update = async (admno: string, user: Student): Promise<Student> => {
+    const updatedStudent = { ...user, updatedAt: new Date() };
+    await studentRepository.update({ admno }, updatedStudent);
+    return await fetchUser(admno);
 }
 
-export const remove = async (id: string): Promise<User | undefined> => {
-    let user = await userRepository.findOneBy({ id });
+export const remove = async (admno: string): Promise<Student | undefined> => {
+    const student = await studentRepository.findOneBy({ admno });
 
-    if(user)
-    await userRepository.softDelete(id);
+    if(student)
+    await studentRepository.softDelete(admno);
 
-    return user;
+    return student;
 }
