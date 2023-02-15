@@ -37,7 +37,10 @@ export const SignIn = async (
       .where("student.admno = :username", { username })
       .getOne();
 
-    // Generate a JWT token for authentication purpose
+    /*
+    * Generate a JWT token for authentication purpose
+    ! JWT SECRET has to be hidden
+    */
     const token = jwt.sign({ id: student.admno }, "secret");
 
     // attack cookie to the response

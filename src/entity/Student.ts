@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, PrimaryColumn } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn } from "typeorm"
 import { IsNotEmpty } from "class-validator";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
@@ -106,4 +106,7 @@ export class Student {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     public updatedAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp', default: () => null })
+    public deletedAt: Date
 }
