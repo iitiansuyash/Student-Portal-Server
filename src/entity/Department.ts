@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { Discipline_Department_Rel } from "./Discipline_Department_Rel";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Discipline } from "./Discipline";
 
 @Entity()
 export class Department{
@@ -12,6 +12,6 @@ export class Department{
     @Column('varchar', { length: 100 })
     public deptName: string
 
-    @OneToMany(() => Discipline_Department_Rel, (discipline) => discipline.dept)
-    disciplines: Discipline_Department_Rel[]
+    @OneToMany(() => Discipline, (disciplines) => disciplines.dept)
+    public discipline: Discipline[]
 }

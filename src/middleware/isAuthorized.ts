@@ -14,7 +14,7 @@ export const isAuthorized = async (req: Request, res: Response, next: NextFuncti
 
     if(!token)
         return next('Not Authorized to access this route');
-    
+
     try {
         const decoded = jwt.verify(token, 'secret');
 
@@ -22,9 +22,6 @@ export const isAuthorized = async (req: Request, res: Response, next: NextFuncti
 
         if(!user)
         return next('No user found with this id');
-
-        if(!user.isRegistered || user.isBlocked || !user.isConfirmed)
-        return next('Not Authorized to access this route.');
 
         req['user'] = user;
         next();

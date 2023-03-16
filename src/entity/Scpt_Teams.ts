@@ -1,17 +1,17 @@
 import { IsNotEmpty } from "class-validator";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Discipline } from "./Discipline";
+import { Scpt } from "./Scpt";
 
 @Entity()
-export class Course{
+export class Scpt_Teams{
 
     @PrimaryGeneratedColumn("increment",{ type: 'int' })
-    public courseId: number
+    public teamId: number
 
     @IsNotEmpty()
     @Column('varchar', { length: 45 })
-    public courseName: string
+    public teamName: string
 
-    @OneToMany(() => Discipline, (disciplines) => disciplines.course)
-    public discipline: Discipline[]
+    @OneToMany(() => Scpt, (scpt) => scpt.team)
+    public scpts: Scpt[]
 }

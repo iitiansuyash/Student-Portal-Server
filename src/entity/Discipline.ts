@@ -1,6 +1,8 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { Specialization_Discipline_Rel } from "./Specialization_Discipline_Rel";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Course } from "./Course";
+import { Department } from "./Department";
+import { Specialization } from "./Specialization";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 
 @Entity()
@@ -13,6 +15,14 @@ export class Discipline{
     @Column('varchar', { length: 45 })
     public disciplineName: string
 
-    @OneToMany(() => Specialization_Discipline_Rel, (specialization) => specialization.discipline)
-    specializations: Specialization_Discipline_Rel[]
+    @OneToMany(() => Specialization, (spec) => spec.discipline)
+    public specs: Specialization[]
+
+    @ManyToOne(() => Department, (department) => department.discipline)
+    @JoinColumn({ name: 'departmentId' })
+    public dept: Department
+
+    @ManyToOne(() => Course, (course) => course.discipline)
+    @JoinColumn({ name: 'courseId' })
+    public course: Course
 }

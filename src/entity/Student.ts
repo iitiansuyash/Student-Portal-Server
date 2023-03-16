@@ -3,6 +3,7 @@ import { IsNotEmpty } from "class-validator";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
+import { NF_Applications } from "./NF_Applications";
 
 export enum Gender {
     MALE = "male",
@@ -100,6 +101,9 @@ export class Student {
 
     @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
     public placementcycles: Placement_Cycle_Enrolment[];
+
+    @OneToMany(() => NF_Applications, (application) => application.student)
+    public applications: NF_Applications[]
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     public createdAt: Date;
