@@ -56,18 +56,19 @@ export const SignIn = async (
 
 export const updateDB = async (req: Request, res: Response, next: NextFunction)=> {
   try {
-    const Specs = await AppDataSource.getRepository('Placementcycle').createQueryBuilder('Placementcycle').select('*').execute();
+    const Specs = await AppDataSource.getRepository('Specialization').createQueryBuilder('Specialization').select('*').execute();
 
-    const SpecsRel = await AppDataSource.getRepository('Acadyear_Placementcycle_rel').createQueryBuilder('Acadyear_Placementcycle_rel').leftJoinAndSelect('Acadyear_Placementcycle_rel.acadYear', 'Placementcycle').where('Acadyear_Placementcycle_rel.acadYear = Academic_Year.year').getMany();
+    const SpecsRel = await AppDataSource.getRepository('Specialization_Discipline_Rel').createQueryBuilder('Specialization_Discipline_Rel').leftJoinAndSelect('Specialization_Discipline_Rel.specId', 'Specialization').where('Specialization_Discipline_Rel.specId = Specialization.specId').getMany();
 
     for(const i in Specs)
     {
       const rel = SpecsRel.filter(item => item.placementCycleId === Specs[i].placementCycleId);
-      Specs[i].acad_year = rel[0]?.acad_year?.year;
-      // await AppDataSource.getRepository('Placementcycle').createQueryBuilder('Placementcycle').update(Placementcycle).set({ course: rel[0]?.course?.courseId }).where("disciplineId=:specId", { specId: Specs[i].disciplineId }).execute();
+      // Specs[i].acad_year = rel[0]?.acad_year?.year;
+      console.log(rel);
+      // await AppDataSource.getRepository('Specialization').createQueryBuilder('Specialization').update(Specialization).set({ discipline: rel[0]?.course?.courseId }).where("disciplineId=:specId", { specId: Specs[i].disciplineId }).execute();
     }
 
-    console.log({ Specs });
+    // console.log({ Specs, SpecsRel });
 
     res.status(200).json({ success: true,SpecsRel, Specs });
   } catch (error) {

@@ -1,9 +1,8 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Course } from "./Course";
 import { Department } from "./Department";
 import { Specialization } from "./Specialization";
-import { Student_Studies_Spec } from "./StudentStudiesSpec";
 
 @Entity()
 export class Discipline{

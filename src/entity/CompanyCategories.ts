@@ -1,8 +1,9 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "./Company";
 
 @Entity()
-export class CompanyCategories{
+export class Companycategories{
 
     @PrimaryGeneratedColumn("increment",{ type: 'int' })
     public categoryId: number
@@ -10,4 +11,7 @@ export class CompanyCategories{
     @IsNotEmpty()
     @Column('varchar', { length: 45 })
     public categoryName: string
+
+    @OneToMany(() => Company, (company) => company.category)
+    public companies: Company
 }

@@ -1,6 +1,7 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Company_Spoc } from "./Company_Spoc";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Companycategories } from "./Companycategories";
+import { Companysectors } from "./Companysectors";
 import { Notification_Form } from "./Notification_Form";
 
 @Entity()
@@ -13,18 +14,26 @@ export class Company{
     @Column('varchar', { length: 70 })
     public companyName: string
 
-    @Column({ type: 'int' })
-    public companyCategoryId: number
+    @ManyToOne(() => Companycategories, (category) => category.companies, { eager: true })
+    @JoinColumn({ name: 'companyCategoryId' })
+    public category: Companycategories
 
-    @Column({ type: 'int' })
-    public companySectorId: number
+    @ManyToOne(() => Companysectors, (sector) => sector.companies, { eager: true })
+    @JoinColumn({ name: 'companySectorId' })
+    public sector: Companysectors
 
     @Column({ type: 'varchar', length: 60 })
     public companyWebsite: string
 
-    @OneToMany(() => Company_Spoc, (spoc) => spoc.company)
-    public spocs: Company_Spoc[]
-
     @OneToMany(() => Notification_Form, nf => nf.company)
     public nfs: Notification_Form[];
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    public createdAt: Date;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    public updatedAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp', default: () => null })
+    public deletedAt: Date
 }

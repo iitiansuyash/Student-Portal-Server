@@ -1,6 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Company_Spoc } from "./Company_Spoc";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Scpt_Teams } from "./Scpt_Teams";
 import { Student } from "./Student";
 
@@ -29,8 +28,5 @@ export class Scpt{
     @IsNotEmpty()
     @Column('varchar', { length: 45 })
     public batch: string
-
-    @OneToMany(() => Company_Spoc, (company) => company.scpt)
-    public companies: Company_Spoc[]
 }
 
