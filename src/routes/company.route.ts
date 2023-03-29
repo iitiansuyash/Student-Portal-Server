@@ -16,5 +16,6 @@ router.get('/search/:placementCycleId/:query', isAuthorized, companyController.s
 router.get('/:companyId', isAuthorized, companyController.fetchCompanyById);
 router.get('/admin/hrs/:companyId', isAuthorized, isAdminMiddleware, companyController.fetchCompanyHRs);
 router.get('/admin/nfs/:companyId', isAuthorized, isAdminMiddleware, companyController.fetchCompanyNFs);
+router.post('/admin', isAuthorized, isAdminMiddleware, companyController.createCompany);
 
 export default router;

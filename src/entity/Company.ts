@@ -14,11 +14,11 @@ export class Company{
     @Column('varchar', { length: 70 })
     public companyName: string
 
-    @ManyToOne(() => Companycategories, (category) => category.companies, { eager: true })
+    @ManyToOne(() => Companycategories, (category) => category.companies, { eager: true, cascade: true })
     @JoinColumn({ name: 'companyCategoryId' })
     public category: Companycategories
 
-    @ManyToOne(() => Companysectors, (sector) => sector.companies, { eager: true })
+    @ManyToOne(() => Companysectors, (sector) => sector.companies, { eager: true, cascade: true })
     @JoinColumn({ name: 'companySectorId' })
     public sector: Companysectors
 

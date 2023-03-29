@@ -2,6 +2,7 @@ import { IsNotEmpty } from "class-validator";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { Discipline } from "./Discipline";
 import { NF_Branch_Eligibility } from "./NF_Branch_Eligibility";
+import { Specialization_Placementcycle_rel } from "./Specialization_placementcycle_rel";
 import { Spec_Offered_Acadyear } from "./Spec_Offered_Acadyear";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 
@@ -27,4 +28,7 @@ export class Specialization{
 
     @OneToMany(() => NF_Branch_Eligibility, (application) => application.spec)
     public nfEligibility: NF_Branch_Eligibility[]
+
+    @OneToMany(() => Specialization_Placementcycle_rel, (cycle) => cycle.specialization)
+    public placementCycles: Specialization_Placementcycle_rel[]
 }

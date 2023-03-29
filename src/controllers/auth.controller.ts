@@ -64,7 +64,6 @@ export const updateDB = async (req: Request, res: Response, next: NextFunction)=
     {
       const rel = SpecsRel.filter(item => item.placementCycleId === Specs[i].placementCycleId);
       // Specs[i].acad_year = rel[0]?.acad_year?.year;
-      console.log(rel);
       // await AppDataSource.getRepository('Specialization').createQueryBuilder('Specialization').update(Specialization).set({ discipline: rel[0]?.course?.courseId }).where("disciplineId=:specId", { specId: Specs[i].disciplineId }).execute();
     }
 

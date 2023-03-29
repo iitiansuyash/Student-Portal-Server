@@ -26,12 +26,12 @@ export class HR_contact{
     @Column({ type: "varchar", length: 100 })
     public linkedin: string
 
-    @OneToMany(() => Hr_contact_emails, (email) => email.hr)
+    @OneToMany(() => Hr_contact_emails, (email) => email.hr, { eager: true, cascade: true })
     public emails: Hr_contact_emails
 
-    @OneToMany(() => Hr_contact_phones, (phone) => phone.hr)
+    @OneToMany(() => Hr_contact_phones, (phone) => phone.hr, { eager: true, cascade: true })
     public phones: Hr_contact_phones
 
-    @OneToMany(() => HR_POC_NF, (poc) => poc.hr)
+    @OneToMany(() => HR_POC_NF, (poc) => poc.hr, { cascade: true, eager: true })
     public pocs: HR_POC_NF
 }

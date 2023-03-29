@@ -7,6 +7,7 @@ import { NF_Branch_Eligibility } from "./NF_Branch_Eligibility";
 import { NF_History_Criteria } from "./NF_History_Criteria";
 import { NF_Job_Stages } from "./NF_Job_Stages";
 import { NF_Supporting_Docs } from "./NF_Supporting_Docs";
+import { Notification_Form_spoc } from "./Notification_Form_spoc";
 import { Placementcycle } from "./Placementcycle";
 
 export enum NF_Type {
@@ -53,6 +54,10 @@ export class Notification_Form{
 
 
     @IsNotEmpty()
+    @Column({ type: 'varchar', length: 100 })
+    public ctc: string
+
+    @IsNotEmpty()
     @Column({ type: 'varchar', length: 300 })
     public ctcBreakup: string
 
@@ -77,6 +82,10 @@ export class Notification_Form{
     public cdcInformation: string
 
     @IsNotEmpty()
+    @Column({ type: 'varchar', length: 1000 })
+    public additionalDetails: string
+
+    @IsNotEmpty()
     @Column({ type: 'enum', enum: Status, default: 'Draft' })
     public status: Status
 
@@ -93,7 +102,7 @@ export class Notification_Form{
     @DeleteDateColumn({ type: 'timestamp', default: () => null })
     public deletedAt: Date
 
-    @ManyToOne(() => Placementcycle, (placementCycle) => placementCycle.nfs, { eager: true })
+    @ManyToOne(() => Placementcycle, (placementCycle) => placementCycle.nfs, { cascade: true, eager: true })
     @JoinColumn({ name: 'placementCycleId' })
     public placementCycle: Placementcycle
 
@@ -118,4 +127,7 @@ export class Notification_Form{
 
     @OneToMany(() => HR_POC_NF, (hr) => hr.notificationForm, { cascade: true, eager: true })
     public HRs: HR_POC_NF[]
+
+    @OneToMany(() => Notification_Form_spoc, (spoc) => spoc.notificationForm, { cascade: true, eager: true })
+    public spocs: Notification_Form_spoc[]
 }

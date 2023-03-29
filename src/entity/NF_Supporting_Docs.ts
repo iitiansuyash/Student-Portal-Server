@@ -1,5 +1,5 @@
-import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Document } from "./Document";
 import { Notification_Form } from "./Notification_Form";
 
 @Entity()
@@ -15,7 +15,7 @@ export class NF_Supporting_Docs{
     @PrimaryColumn({ type: 'varchar', length: 45 })
     public docType: string
 
-    @IsNotEmpty()
-    @Column({ type: 'varchar', length: 100 })
-    public docLink: string
+    @OneToOne(() => Document, { cascade: true, eager: true })
+    @JoinColumn({ name: 'docId' })
+    public document: Document
 }

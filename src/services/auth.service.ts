@@ -12,7 +12,6 @@ export const validateStudent = async (
     },
   });
 
-  console.log(student);
 
   // if (student) {
   //     if (await Student.comparePassword(student, password)) {

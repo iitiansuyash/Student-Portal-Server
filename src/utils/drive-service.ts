@@ -1,7 +1,9 @@
 import { google } from 'googleapis';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { Document } from '../entity/Document';
+import { AppDataSource } from '../data-source';
 
 dotenv.config();
 
@@ -22,28 +24,45 @@ const drive = google.drive({
 
 // const filePath = path.join(__dirname, 'bg.jpg');
 
-exports.uploadFile = async (req: { file: { path: string }}, res: Response, next: NextFunction) => {
-    const filePath = req.file.path;
+interface UploadRequest extends Request {
+    file: {
+        path: string,
+        field: string,
+        originalname: string
+    }
+}
 
+export const uploadFile = async (req: UploadRequest, res: Response, next: NextFunction) => {
+    const filePath = req.file.path;
     try {
         const response = await drive.files.create({
             requestBody: {
-                name: `file-${Date.now()}`,
-                mimeType: 'image/jpg'
+                name: req?.file?.originalname || `File-${Date.now()}`,
+                mimeType: 'application/pdf'
             },
             media: {
-                mimeType: 'image/jpg',
+                mimeType: 'application/pdf',
                 body: fs.createReadStream(filePath),
             }
         });
 
-        res.status(201).json({ success: true, data: response.data });
+        const document = new Document();
+        document.id = response?.data?.id;
+        document.name = response?.data?.name;
+        document.mimeType = response?.data?.mimeType;
+        document.previewLink = await generatePreviewUrl(response?.data?.id);
+        document.downloadLink = await generateDownloadUrl(response?.data?.id);
+
+        const newDocument = await AppDataSource.getRepository('Document').save(document);
+
+        res.status(201).json({ success: true, document: newDocument });
     } catch (error) {
+        console.log(error);
         return next(error);
     }
 }
 
-exports.deleteFile = async (req, res, next) => {
+export const deleteFile = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -57,10 +76,8 @@ exports.deleteFile = async (req, res, next) => {
     }
 }
 
-exports.generatePreviewUrl = async (req, res, next) => {
+export const generatePreviewUrl = async (fileId: string) => {
     try {
-        const fileId = req.params.id;
-
         await drive.permissions.create({
             fileId,
             requestBody: {
@@ -74,16 +91,14 @@ exports.generatePreviewUrl = async (req, res, next) => {
             fields: 'webViewLink'
         });
 
-        res.status(201).json({ previewLink: result.data.webViewLink });
+        return result.data.webViewLink;
     } catch (error) {
-        return next(error);
+        return error;
     }
 }
 
-exports.generateDownloadUrl = async (req, res, next) => {
+export const generateDownloadUrl = async (fileId: string) => {
     try {
-        const fileId = req.params.id;
-
         await drive.permissions.create({
             fileId,
             requestBody: {
@@ -97,8 +112,8 @@ exports.generateDownloadUrl = async (req, res, next) => {
             fields: 'webContentLink'
         });
 
-    res.status(201).json({ downloadLink: result.data.webContentLink });
+    return result.data.webContentLink;
     } catch (error) {
-        return next(error);
+        return error;
     }
 }

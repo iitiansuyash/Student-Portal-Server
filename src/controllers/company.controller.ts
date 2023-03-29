@@ -2,6 +2,18 @@ import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Company } from "../entity/Company";
 import { Notification_Form } from "../entity/Notification_Form";
+import * as companyService from '../services/company.service';
+
+const createCompanyData = (data) => {
+  const company = new Company();
+
+  company.companyName = data.companyName;
+  company.companyWebsite = data.companyWebsite;
+  company.category = data.category;
+  company.sector = data.sector;
+
+  return company;
+}
 
 export const fetchAllCompanies = async (
   req: Request,
@@ -148,6 +160,16 @@ export const fetchCompanyNFs = async (req: Request, res: Response, next: NextFun
     `);
 
     res.status(201).json({ success: true, NFs });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export const createCompany = async ( req: Request, res: Response, next: NextFunction) : Promise<Company | void> => {
+  try {
+    const company = await companyService.createCompany(createCompanyData(req.body));
+
+    res.status(201).json({ success: true, company });
   } catch (error) {
     return next(error);
   }

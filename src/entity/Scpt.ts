@@ -1,5 +1,6 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Notification_Form_spoc } from "./Notification_Form_spoc";
 import { Scpt_Teams } from "./Scpt_Teams";
 import { Student } from "./Student";
 
@@ -28,5 +29,8 @@ export class Scpt{
     @IsNotEmpty()
     @Column('varchar', { length: 45 })
     public batch: string
+
+    @OneToMany(() => Notification_Form_spoc, (nf) => nf.scpt)
+    public nfs: Notification_Form_spoc[]
 }
 
