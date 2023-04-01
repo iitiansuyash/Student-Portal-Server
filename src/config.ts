@@ -11,5 +11,8 @@ export const env = {
     jwtSecret: process.env.JWT_SECRET,
     httponly: {
         adminReqOrigin: process.env.ADMIN_REQ_ORIGIN?.split(','),
+    },
+    api: {
+        bodyParser: false
     }
 }

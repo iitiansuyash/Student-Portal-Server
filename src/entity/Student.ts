@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn } from "typeorm"
 import { IsNotEmpty } from "class-validator";
-import { User } from "./User";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
+import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
+// import { NF_Applications } from "./NF_Applications";
 
 export enum Gender {
     MALE = "male",
@@ -35,10 +36,6 @@ export class Student {
     @IsNotEmpty()
     @Column("varchar", { length: 45 })
     public last_name: string
-
-    @IsNotEmpty()
-    @OneToOne(() => User, (user) => user.student, { eager: true })
-    public user: User
 
     @IsNotEmpty()
     @Column("varchar", { length: 6 })
@@ -78,15 +75,15 @@ export class Student {
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
-    public isPWD: Number
+    public isPWD: number
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
-    public isEWS: Number
+    public isEWS: number
 
     @IsNotEmpty()
     @Column({ type: 'int', default: 0 })
-    public permissions: Number
+    public permissions: number
 
     @IsNotEmpty()
     @Column("varchar", { length: 45 })
@@ -97,14 +94,23 @@ export class Student {
     public uidValue: string
 
     @OneToMany(() => Student_cvs, (cv) => cv.student)
-    cvs: Student_cvs[]
-    
+    public cvs: Student_cvs[]
+
     @OneToMany(() => Student_Studies_Spec, (cv) => cv.student)
-    specializations: Student_Studies_Spec[]
+    public specializations: Student_Studies_Spec[]
+
+    @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
+    public placementcycles: Placement_Cycle_Enrolment[];
+
+    // @OneToMany(() => NF_Applications, (application) => application.student)
+    // public applications: NF_Applications[]
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     public createdAt: Date;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     public updatedAt: Date;
+
+    @DeleteDateColumn({ type: 'timestamp', default: () => null })
+    public deletedAt: Date
 }

@@ -7,7 +7,7 @@ import { Student } from "./Student";
 export class Student_Studies_Spec{
 
     @PrimaryColumn({ type: 'int' })
-    public study_id: Number
+    public study_id: number
 
     @ManyToOne(() => Student, (student) => student.specializations)
     @JoinColumn({ name: "admno" })
@@ -19,7 +19,7 @@ export class Student_Studies_Spec{
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
-    public isParent: Number
+    public isParent: number
 
     @IsNotEmpty()
     @Column('varchar', { length: 200 })
@@ -27,17 +27,17 @@ export class Student_Studies_Spec{
 
     @IsNotEmpty()
     @Column({ type: 'float' })
-    public cgpaValue: Number
+    public cgpaValue: number
 
     @IsNotEmpty()
     @Column({ type: 'float', default: 10 })
-    public cgpaScale: Number
+    public cgpaScale: number
 
     @IsNotEmpty()
     @Column({ type: 'int' })
-    public totalBacklogs: Number
-    
+    public totalBacklogs: number
+
     @IsNotEmpty()
     @Column({ type: 'int' })
-    public activeBacklogs: Number
+    public activeBacklogs: number
 }
