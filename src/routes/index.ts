@@ -11,10 +11,12 @@ import courseRoutes from './course.route';
 import scptRoutes from './scpt.routes';
 import hrRoutes from './hr.route';
 import selectionStagesRoutes from './selectionStages.route';
+import userRoutes from './user.route';
 
 const router = express.Router();
 
 router.use('/student', studentRoutes);
+router.use('/user', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/jobs', jobRoutes);
 router.use('/company', companyRoutes);

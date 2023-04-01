@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as jwt from 'jsonwebtoken';
 import { COOKIE_NAME } from "../constants";
 import { Student } from "../entity/Student";
-import { fetchUser } from "../services/user.service";
+import { fetchStudent } from "../services/student.service";
 
 export interface UserRequest extends Request{
     user: Student
