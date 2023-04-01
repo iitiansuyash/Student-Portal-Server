@@ -1,6 +1,6 @@
 import { Student } from "../entity/Student";
 import { studentRepository } from "../repositories/student.repository";
-import * as userService from './user.service';
+import * as userService from './student.service';
 
 export const validateStudent = async (
   username: string,
@@ -19,7 +19,7 @@ export const validateStudent = async (
   //     }
   // }
   if (student && password) {
-    return await userService.fetchUser(student.admno);
+    return await userService.fetchStudent(student.admno);
   }
   return undefined;
 };

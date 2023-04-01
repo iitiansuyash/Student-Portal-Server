@@ -5,6 +5,8 @@ import { CookieOptions, COOKIE_NAME } from "../constants";
 import { Student } from "../entity/Student";
 import { studentRepository } from "../repositories/student.repository";
 import { AppDataSource } from "../data-source";
+import { User } from "../entity/User";
+import * as userService from '../services/user.service';
 
 interface SignInBody {
   username: string;
@@ -53,6 +55,28 @@ export const SignIn = async (
   }
 };
 
+export const adminSignin = async (req: Request, res: Response, next: NextFunction) : Promise<User | void> => {
+  try {
+    const { email, password } = req.body;
+    const user = await userService.findByQuery({ email });
+
+    if(!user.comparePassword(password))
+    res.status(401).json({ success: false, message: 'Bad Credentials!!'});
+
+    /*
+    * Generate a JWT token for authentication purpose
+    ! JWT SECRET has to be hidden
+    */
+    const token = jwt.sign({ id: user.id }, "secret");
+
+    // attack cookie to the response
+    res.cookie(COOKIE_NAME, token, CookieOptions);
+
+    res.status(200).json({ success: true, user, token });
+  } catch (error) {
+    return next(error);
+  }
+}
 
 export const updateDB = async (req: Request, res: Response, next: NextFunction)=> {
   try {

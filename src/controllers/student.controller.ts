@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import * as userService from '../services/user.service';
+import * as userService from '../services/student.service';
 import { Student } from '../entity/Student';
 
 interface CreateStudentBody {
@@ -31,7 +31,7 @@ export const findStudentById = async (req: Request, res: Response, next: NextFun
     const admno = req.params?.admno;
 
     try {
-        const student = await userService.fetchUser(admno);
+        const student = await userService.fetchStudent(admno);
 
         if(!student)
         return next('Student not found');
