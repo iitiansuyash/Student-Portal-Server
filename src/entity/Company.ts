@@ -1,7 +1,7 @@
 import { IsNotEmpty } from "class-validator";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Companycategories } from "./Companycategories";
-import { Companysectors } from "./Companysectors";
+import { Companycategories } from "./CompanyCategories";
+import { Companysectors } from "./CompanySectors";
 import { Notification_Form } from "./Notification_Form";
 
 @Entity()

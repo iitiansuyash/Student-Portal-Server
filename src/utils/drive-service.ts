@@ -1,17 +1,15 @@
 import { google } from 'googleapis';
 import * as fs from 'fs';
-import * as dotenv from 'dotenv';
 import { NextFunction, Request, Response } from "express";
 import { Document } from '../entity/Document';
 import { AppDataSource } from '../data-source';
+import { env } from '../config';
 
-dotenv.config();
+const clientId = env.drive.clientId;
+const clientSecret = env.drive.clientSecret;
+const redirectURI = env.drive.redirectURI;
 
-const clientId = process.env.DRIVE_CLIENT_ID;
-const clientSecret = process.env.DRIVE_CLIENT_SECRET;
-const redirectURI = process.env.DRIVE_REDIRECT_URI;
-
-const refreshToken = process.env.DRIVE_REFRESH_TOKEN;
+const refreshToken = env.drive.refreshToken;
 
 const oAuth2Client = new google.auth.OAuth2( clientId, clientSecret, redirectURI );
 
@@ -21,8 +19,6 @@ const drive = google.drive({
     version: 'v3',
     auth: oAuth2Client
 })
-
-// const filePath = path.join(__dirname, 'bg.jpg');
 
 interface UploadRequest extends Request {
     file: {

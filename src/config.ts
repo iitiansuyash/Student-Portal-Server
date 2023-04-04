@@ -1,5 +1,6 @@
-import { AppDataSource } from "./data-source";
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 
 export const env = {
     node: process.env.NODE_ENV || 'development',
@@ -14,5 +15,11 @@ export const env = {
     },
     api: {
         bodyParser: false
-    }
+    },
+    drive: {
+        clientId: process.env.DRIVE_CLIENT_ID,
+        clientSecret: process.env.DRIVE_CLIENT_SECRET,
+        redirectURI: process.env.DRIVE_REDIRECT_URI,
+        refreshToken: process.env.DRIVE_REFRESH_TOKEN
+    },
 }

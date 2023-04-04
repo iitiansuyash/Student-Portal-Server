@@ -12,8 +12,11 @@ export class User {
     @Column({ type: "varchar", length: 25 })
     public phone: string
 
-    @Column({ type: "varchar", length: 100 })
+    @Column({ type: "varchar", length: 100, unique: true })
     public email: string
+
+    @Column({ type: "varchar", length: 50, unique: true })
+    public username: string
 
     @Column({ type: "bigint", default: 0 })
     public permissions: number

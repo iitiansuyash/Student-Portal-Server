@@ -3,7 +3,8 @@ import { UserRepository } from "../repositories/usser.repository";
 
 interface Query {
     id?: number;
-    email?: string
+    email?: string;
+    username?: string;
 }
 
 export const findAll = async () : Promise<User[] | undefined> => {

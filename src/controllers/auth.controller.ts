@@ -4,9 +4,12 @@ import * as jwt from "jsonwebtoken";
 import { CookieOptions, COOKIE_NAME } from "../constants";
 import { Student } from "../entity/Student";
 import { studentRepository } from "../repositories/student.repository";
-import { AppDataSource } from "../data-source";
 import { User } from "../entity/User";
 import * as userService from '../services/user.service';
+import { ADMIN, STUDENT } from '../constants/index';
+import { APIError } from "../utils/error/apiError";
+import { HttpStatusCode } from "../utils/error/httpStatusCode";
+import { env } from "../config";
 
 interface SignInBody {
   username: string;
@@ -29,7 +32,13 @@ export const SignIn = async (
     );
 
     // If student not found return with an error response
-    if (!student) return next("Invalid Credentials.");
+    if (!student)
+    throw new APIError(
+      'Incorrect Credentials',
+      HttpStatusCode.BAD_REQUEST,
+      true,
+      'Username or Password is incorrect!'
+    );
 
     // Prepare Student Data
     const studentData = await studentRepository
@@ -44,7 +53,7 @@ export const SignIn = async (
     * Generate a JWT token for authentication purpose
     ! JWT SECRET has to be hidden
     */
-    const token = jwt.sign({ id: student.admno }, "secret");
+    const token = jwt.sign({ id: student.admno, role: STUDENT }, env.jwtSecret);
 
     // attack cookie to the response
     res.cookie(COOKIE_NAME, token, CookieOptions);
@@ -57,43 +66,27 @@ export const SignIn = async (
 
 export const adminSignin = async (req: Request, res: Response, next: NextFunction) : Promise<User | void> => {
   try {
-    const { email, password } = req.body;
-    const user = await userService.findByQuery({ email });
+    const { username, password } = req.body;
+    const user = await userService.findByQuery({ username });
 
-    if(!user.comparePassword(password))
-    res.status(401).json({ success: false, message: 'Bad Credentials!!'});
+    if(!user || !user.comparePassword(password))
+    throw new APIError(
+      'Incorrect Credentials',
+      HttpStatusCode.BAD_REQUEST,
+      true,
+      'Username or Password is incorrect!'
+    );
 
     /*
     * Generate a JWT token for authentication purpose
     ! JWT SECRET has to be hidden
     */
-    const token = jwt.sign({ id: user.id }, "secret");
+    const token = jwt.sign({ id: user.id, role: ADMIN }, env.jwtSecret);
 
     // attack cookie to the response
     res.cookie(COOKIE_NAME, token, CookieOptions);
 
     res.status(200).json({ success: true, user, token });
-  } catch (error) {
-    return next(error);
-  }
-}
-
-export const updateDB = async (req: Request, res: Response, next: NextFunction)=> {
-  try {
-    const Specs = await AppDataSource.getRepository('Specialization').createQueryBuilder('Specialization').select('*').execute();
-
-    const SpecsRel = await AppDataSource.getRepository('Specialization_Discipline_Rel').createQueryBuilder('Specialization_Discipline_Rel').leftJoinAndSelect('Specialization_Discipline_Rel.specId', 'Specialization').where('Specialization_Discipline_Rel.specId = Specialization.specId').getMany();
-
-    for(const i in Specs)
-    {
-      const rel = SpecsRel.filter(item => item.placementCycleId === Specs[i].placementCycleId);
-      // Specs[i].acad_year = rel[0]?.acad_year?.year;
-      // await AppDataSource.getRepository('Specialization').createQueryBuilder('Specialization').update(Specialization).set({ discipline: rel[0]?.course?.courseId }).where("disciplineId=:specId", { specId: Specs[i].disciplineId }).execute();
-    }
-
-    // console.log({ Specs, SpecsRel });
-
-    res.status(200).json({ success: true,SpecsRel, Specs });
   } catch (error) {
     return next(error);
   }
