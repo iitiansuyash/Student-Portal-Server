@@ -10,6 +10,6 @@ const router = express.Router();
     ! Admin access - Need to be checked for "isAuthorized"
     ! Admin access - Need to be checked for "isAuthorized" and "isAdminMiddleware"
 */
-router.get('/admin/:courseId', isAuthorized, isAdminMiddleware, specializationController.fetchSpecializationForCourse);
+router.post('/admin', isAuthorized, isAdminMiddleware, specializationController.fetchSpecializationForCourse);
 
 export default router;

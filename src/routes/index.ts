@@ -12,6 +12,7 @@ import scptRoutes from './scpt.routes';
 import hrRoutes from './hr.route';
 import selectionStagesRoutes from './selectionStages.route';
 import userRoutes from './user.route';
+import departmentRoutes from './department.route';
 
 const router = express.Router();
 
@@ -28,5 +29,6 @@ router.use('/course', courseRoutes);
 router.use('/scpt', scptRoutes);
 router.use('/hr', hrRoutes);
 router.use('/stage', selectionStagesRoutes);
+router.use('/department', departmentRoutes);
 
 export default router;

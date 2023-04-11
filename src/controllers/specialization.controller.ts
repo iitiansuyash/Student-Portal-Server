@@ -5,7 +5,7 @@ import { Specialization } from "../entity/Specialization";
 
 export const fetchSpecializationForCourse = async (req: Request, res: Response, next: NextFunction) : Promise<Specialization[] | void> => {
     try {
-        const { courseId } = req.params;
+        const courseIds = req.body;
         const specializations = await AppDataSource.query(`
             SELECT s.*, d.disciplineName, d.departmentId, d.courseId, c.courseName AS courseName, dept.deptName as departmentName
             FROM specialization AS s
@@ -15,7 +15,7 @@ export const fetchSpecializationForCourse = async (req: Request, res: Response, 
             ON d.departmentId = dept.deptId
             LEFT JOIN course AS c
             ON d.courseId = c.courseId
-            WHERE c.courseId = ${courseId}
+            WHERE c.courseId IN (${courseIds})
         `);
 
         res.status(201).json({ success: true, specializations });
