@@ -11,5 +11,6 @@ const router = express.Router();
     ! Admin access - Need to be checked for "isAuthorized" and "isAdminMiddleware"
 */
 router.get('/admin', isAuthorized, isAdminMiddleware, placementCycleController.fetchAllPlacementCycles);
+router.get('/enrolled', isAuthorized, placementCycleController.fetchEnrolledPlacementCycle);
 
 export default router;
