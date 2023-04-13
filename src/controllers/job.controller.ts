@@ -8,7 +8,7 @@ import { NF_Supporting_Docs } from "../entity/NF_Supporting_Docs";
 import { UserRequest } from "../middleware/isAuthorized";
 import { NF_Repository } from "../repositories/job.repository";
 import { createNF, fetchNF, removeNF, updateNF } from "../services/nf.service";
-import { Notification_Form_spoc } from "../entity/Notification_Form_SPOC";
+import { Notification_Form_spoc } from "../entity/Notification_Form_spoc";
 import { HR_POC_NF } from "../entity/HR_POC_NF";
 
 const createCompanyData = (company_details) => {

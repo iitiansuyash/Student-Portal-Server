@@ -12,6 +12,10 @@ export class Course{
     @Column('varchar', { length: 45 })
     public courseName: string
 
+    @IsNotEmpty()
+    @Column('varchar', { length: 20 })
+    public duration: string
+
     @OneToMany(() => Discipline, (disciplines) => disciplines.course)
     public discipline: Discipline[]
 }

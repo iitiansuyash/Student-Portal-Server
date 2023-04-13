@@ -12,5 +12,6 @@ const router = express.Router();
 */
 router.get('/admin', isAuthorized, isAdminMiddleware, placementCycleController.fetchAllPlacementCycles);
 router.get('/enrolled', isAuthorized, placementCycleController.fetchEnrolledPlacementCycle);
+router.post('/admin', isAuthorized, placementCycleController.createNewPlacementCycle);
 
 export default router;

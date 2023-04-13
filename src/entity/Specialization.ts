@@ -21,7 +21,7 @@ export class Specialization{
 
     @OneToMany(() => Spec_Offered_Acadyear, (specToAcadyear) => specToAcadyear.spec)
     public specToAcadyear: Spec_Offered_Acadyear[];
-    
+
     @ManyToOne(() => Discipline, (discipline) => discipline.specs)
     @JoinColumn({ name: 'disciplineId' })
     public discipline: Discipline
