@@ -1,6 +1,7 @@
-import { Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Placementcycle } from "./Placementcycle";
 import { Spec_Offered_Acadyear } from "./Spec_Offered_Acadyear";
+import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class Academic_Year{
@@ -13,4 +14,8 @@ export class Academic_Year{
 
     @OneToMany(() => Placementcycle, (placementCycle) => placementCycle.acadYear)
     public placementCycles: Placementcycle[]
+
+    @IsNotEmpty()
+    @Column({ type: 'int', default: 0 })
+    public isCurrent: number
 }

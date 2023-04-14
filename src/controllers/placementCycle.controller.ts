@@ -14,10 +14,11 @@ const createCycleSpecRel = (spec) => {
     return specRel;
 }
 
-const createAcadYear = (year) => {
+const createAcadYear = (yearData) => {
     const acadYear = new Academic_Year();
 
-    acadYear.year = year;
+    acadYear.year = yearData.year;
+    acadYear.isCurrent = yearData.isCurrent;
 
     return acadYear;
 }
