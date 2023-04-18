@@ -6,6 +6,7 @@ const createUserData = (data: User) => {
     const user = new User();
 
     user.name = data.name;
+    user.username = data.username;
     user.phone = data.phone;
     user.email = data.email;
     user.password = data.password;
