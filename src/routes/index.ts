@@ -14,6 +14,7 @@ import selectionStagesRoutes from './selectionStages.route';
 import userRoutes from './user.route';
 import departmentRoutes from './department.route';
 import acadYearRoutes from './acadYear.route';
+import disciplineRoutes from './discipline.route';
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/hr', hrRoutes);
 router.use('/stage', selectionStagesRoutes);
 router.use('/department', departmentRoutes);
 router.use('/acadyear', acadYearRoutes);
+router.use('/discipline', disciplineRoutes);
 
 export default router;

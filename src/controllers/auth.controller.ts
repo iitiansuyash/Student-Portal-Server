@@ -55,7 +55,7 @@ export const SignIn = async (
     */
     const token = jwt.sign({ id: student.admno, role: STUDENT }, env.jwtSecret);
 
-    // attack cookie to the response
+    // attach cookie to the response
     res.cookie(COOKIE_NAME, token, CookieOptions);
 
     res.status(200).json({ success: true, studentData, token });
@@ -83,7 +83,7 @@ export const adminSignin = async (req: Request, res: Response, next: NextFunctio
     */
     const token = jwt.sign({ id: user.id, role: ADMIN }, env.jwtSecret);
 
-    // attack cookie to the response
+    // attach cookie to the response
     res.cookie(COOKIE_NAME, token, CookieOptions);
 
     res.status(200).json({ success: true, user, token });

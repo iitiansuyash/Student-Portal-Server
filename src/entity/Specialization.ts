@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Discipline } from "./Discipline";
 import { NF_Branch_Eligibility } from "./NF_Branch_Eligibility";
 import { Specialization_Placementcycle_rel } from "./Specialization_placementcycle_rel";
@@ -9,7 +9,7 @@ import { Student_Studies_Spec } from "./StudentStudiesSpec";
 @Entity()
 export class Specialization{
 
-    @PrimaryColumn({ type: 'int' })
+    @PrimaryGeneratedColumn("increment", { type: 'int' })
     public specId: number
 
     @IsNotEmpty()
@@ -17,12 +17,12 @@ export class Specialization{
     public specName: string
 
     @OneToMany(() => Student_Studies_Spec, (cv) => cv.specialization)
-    specializations: Student_Studies_Spec[]
+    public students: Student_Studies_Spec[]
 
     @OneToMany(() => Spec_Offered_Acadyear, (specToAcadyear) => specToAcadyear.spec)
     public specToAcadyear: Spec_Offered_Acadyear[];
 
-    @ManyToOne(() => Discipline, (discipline) => discipline.specs)
+    @ManyToOne(() => Discipline, (discipline) => discipline.specs, { cascade: true })
     @JoinColumn({ name: 'disciplineId' })
     public discipline: Discipline
 

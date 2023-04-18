@@ -2,6 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Specialization } from "../entity/Specialization";
 
+const specializationData = (specData) => {
+    const specialization = new Specialization();
+
+    specialization.specName = specData.specName;
+    specialization.discipline = specData.discipline;
+
+    return specialization;
+}
+
 
 export const fetchSpecializationForCourse = async (req: Request, res: Response, next: NextFunction) : Promise<Specialization[] | void> => {
     try {
@@ -21,6 +30,17 @@ export const fetchSpecializationForCourse = async (req: Request, res: Response, 
         `);
 
         res.status(201).json({ success: true, specializations });
+    } catch (error) {
+        return next(error);
+    }
+}
+
+export const createSpecialization = async (req: Request, res: Response, next: NextFunction) : Promise<Specialization | void> => {
+    try {
+        const specData = req.body;
+        const specialization = await AppDataSource.getRepository(Specialization).save(specializationData(specData));
+
+        res.status(201).json({ success: true, specialization });
     } catch (error) {
         return next(error);
     }
