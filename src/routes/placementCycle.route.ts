@@ -14,5 +14,7 @@ router.get('/admin', isAuthorized, isAdminMiddleware, placementCycleController.f
 router.get('/enrolled', isAuthorized, placementCycleController.fetchEnrolledPlacementCycle);
 router.post('/admin', isAuthorized, isAdminMiddleware, placementCycleController.createNewPlacementCycle);
 router.get('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.fetchPlacementCycleById);
+router.put('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.updatePlacementCycle);
+router.put('/admin/specialization/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.updateSpecializationForCycle);
 
 export default router;

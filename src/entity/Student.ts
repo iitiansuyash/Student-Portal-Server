@@ -1,8 +1,9 @@
-import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm"
 import { IsNotEmpty } from "class-validator";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
+import { Graduation_Year } from './Graduation_Year';
 // import { NF_Applications } from "./NF_Applications";
 
 export enum Gender {
@@ -101,6 +102,10 @@ export class Student {
 
     @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
     public placementcycles: Placement_Cycle_Enrolment[];
+
+    @ManyToOne(() => Graduation_Year, (year) => year.student)
+    @JoinColumn({ name: 'graduatingYear' })
+    public graduatingYear: Graduation_Year
 
     // @OneToMany(() => NF_Applications, (application) => application.student)
     // public applications: NF_Applications[]

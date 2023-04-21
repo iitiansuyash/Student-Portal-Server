@@ -16,7 +16,7 @@ export const fetchSpecializationForCourse = async (req: Request, res: Response, 
     try {
         const { courseIds, acadYear } = req.body;
         const specializations = await AppDataSource.query(`
-            SELECT s.*, d.disciplineName, d.departmentId, d.courseId, c.courseName AS courseName, dept.deptName as departmentName, soa.acadYear
+            SELECT s.*, d.disciplineId, d.disciplineName, dept.deptId, dept.deptName, c.courseId, c.courseName, soa.acadYear
             FROM specialization AS s
             LEFT JOIN discipline AS d
             ON d.disciplineId = s.disciplineId
