@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as jwt from 'jsonwebtoken';
 import { ADMIN, COOKIE_NAME } from "../constants";
-import { Student } from "../entity/Student";
 import { fetchStudent } from "../services/student.service";
 import { fetchUser } from "../services/user.service";
 import { UnauthorizedError } from "../utils/error/unauthorizedError";
@@ -9,7 +8,8 @@ import { NotFoundError } from "../utils/error/notFoundError";
 import { env } from "../config";
 
 export interface UserRequest extends Request{
-    user: Student
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    user: any
 }
 
 export const isAuthorized = async (req: Request, res: Response, next: NextFunction) => {

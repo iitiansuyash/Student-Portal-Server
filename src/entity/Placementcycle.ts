@@ -12,6 +12,7 @@ import { Notification_Form } from "./Notification_Form";
 import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
 import { Specialization_Placementcycle_rel } from "./Specialization_placementcycle_rel";
 import { Graduation_Year } from "./Graduation_Year";
+import { Notices } from './Notices';
 
 export enum PlacementCycleType {
   INTERNSHIP = "internship",
@@ -69,4 +70,7 @@ export class Placementcycle {
     { cascade: true }
   )
   public specializations: Specialization_Placementcycle_rel[];
+
+  @OneToMany(() => Notices, (notice) => notice.placementCycle)
+  public notices: Notices[]
 }

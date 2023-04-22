@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn, BeforeUpdate, BeforeInsert } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn, BeforeUpdate, BeforeInsert, OneToMany } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import { Notices } from './Notices';
 
 @Entity()
 export class User {
@@ -42,4 +43,7 @@ export class User {
 
     @DeleteDateColumn({ type: 'timestamp', default: () => null })
     public deletedAt: Date
+
+    @OneToMany(() => Notices,(notice) => notice.user)
+    public notices: Notices[]
 }
