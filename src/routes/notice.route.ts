@@ -6,7 +6,7 @@ import { isAdminMiddleware } from '../middleware/isAdminMiddleware';
 
 const router = express.Router();
 
-router.post('/', isAuthorized, noticeController.fetchNoticesForCycles);
+router.post('/', noticeController.fetchNoticesForCycles);
 router.post('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, noticeController.createNotice);
 
 export default router;
