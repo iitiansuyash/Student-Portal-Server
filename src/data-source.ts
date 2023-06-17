@@ -3,7 +3,7 @@ import { DataSource } from "typeorm"
 import { env } from './config';
 
 export const AppDataSource = new DataSource({
-    type: "mysql2",
+    type: "mysql",
     host: env.db.host,
     port: parseInt(env.db.port),
     username: env.db.username,
