@@ -19,5 +19,7 @@ router.get('/admin/search/:placementCycleId/:query', isAuthorized, isAdminMiddle
 router.post('/admin', jobController.createNewJob);
 router.put('/admin/:jobId', jobController.updateJob);
 router.delete('/admin/:jobId', jobController.deleteJob);
+router.get('/admin/:jobId/applicants', jobController.getApplicants);
+router.post('/admin/:jobId/shortlist', jobController.shortlistStudent);
 
 export default router;

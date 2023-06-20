@@ -10,6 +10,8 @@ import { NF_Repository } from "../repositories/job.repository";
 import { createNF, fetchNF, removeNF, updateNF } from "../services/nf.service";
 import { Notification_Form_spoc } from "../entity/Notification_Form_spoc";
 import { HR_POC_NF } from "../entity/HR_POC_NF";
+import { NF_Applications } from "../entity/NF_Applications";
+import { NF_Shortlisting } from "../entity/NF_Shortlisting";
 
 const createCompanyData = (company_details) => {
   const company = new Company();
@@ -84,8 +86,8 @@ const createSpocData = (spocs, nfId?) => {
     newSpoc.nfId = nfId;
     newSpoc.scpt = spoc.scpt;
     newSpoc.isPrimary = spoc.isPrimary;
-    if(newSpoc.scpt)
-    spocList.push(newSpoc);
+    if (newSpoc.scpt)
+      spocList.push(newSpoc);
   });
 
   return spocList;
@@ -188,7 +190,7 @@ export const fetchJobsForAdmin = async (
   }
 };
 
-export const searchJobsForAdmin = async (req: Request, res: Response, next: NextFunction) : Promise<Notification_Form | void> => {
+export const searchJobsForAdmin = async (req: Request, res: Response, next: NextFunction): Promise<Notification_Form | void> => {
   try {
     const { placementCycleId, query } = req.params;
 
@@ -292,3 +294,68 @@ export const deleteJob = async (
     return next(error);
   }
 };
+
+export const getApplicants = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+): Promise<Notification_Form | void> => {
+  try {
+    const { jobId } = req.params;
+    console.log(jobId);
+
+    const applicants = await AppDataSource.query(`
+    SELECT nf_applications.cvId, nf_applications.admno, student.first_name, 
+    student.last_name, student.phonePref, student.phone, student.dob, student.gender, 
+    student.instiMailId, student.personalMailId, student.isPWD, student.category,
+    student.isEWS, student.graduatingYear FROM studentportal.nf_applications, 
+    studentportal.student WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = student.admno; 
+  `);
+
+
+    res.status(200).json({ success: true, applicants })
+
+  } catch (error) {
+    return next(error)
+  }
+};
+
+export const shortlistStudent = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+
+
+    const { listType, seqNo, admno, finalCTC } = req.body
+    const { jobId } = req.params
+    // check applied for the company??
+    const applied = await AppDataSource.query(`
+     SELECT * FROM studentportal.nf_applications WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = "${admno}";
+  `)
+    if (!applied) return res.status(400).json({ success: false, message: "Student not applied for this Job" });
+
+    // check for alredy placed
+    const placed = await AppDataSource.query(` 
+  SELECT * FROM studentportal.nf_shortlisting 
+  JOIN nf_job_stages ON nf_shortlisting.nfId = nf_job_stages.nfId 
+  and nf_shortlisting.seqNo = nf_job_stages.seqNo 
+  WHERE nf_job_stages.isFinalRound = 1 and nf_shortlisting.admno = "${admno}";
+  `);
+    if (placed) return res.status(400).json({ success: false, message: "Student already placed" });
+
+    const shortlistingStudent = new NF_Shortlisting()
+    shortlistingStudent.nfId = Number(jobId);
+    shortlistingStudent.seqNo = Number(seqNo);
+    shortlistingStudent.admno = admno;
+    shortlistingStudent.listType = listType;
+    shortlistingStudent.finalCTC = finalCTC
+    // //  add in nf_shortlisting
+    await AppDataSource.getRepository('NF_Shortlisting').save(shortlistingStudent);
+
+    return res.status(200).json({ success: true, message: "Student added to shortlist" });
+  } catch (error) {
+    return next(error)
+  }
+}
