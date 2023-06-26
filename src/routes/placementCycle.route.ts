@@ -16,5 +16,5 @@ router.post('/admin', isAuthorized, isAdminMiddleware, placementCycleController.
 router.get('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.fetchPlacementCycleById);
 router.put('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.updatePlacementCycle);
 router.put('/admin/specialization/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.updateSpecializationForCycle);
-
+router.post('/student/enroll/:placementCycleId', isAuthorized, placementCycleController.enrollStudent)
 export default router;
