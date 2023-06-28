@@ -1,7 +1,8 @@
-version: '3.1'
+version: '3'
 services:
   mysqldb:
-    image: mysql:8.0
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -14,23 +15,20 @@ services:
   adminer:
     image: adminer
     restart: always
+    depends_on:
+      - mysqldb
     ports:
       - 8080:8080
 
-  sp-client:
-    build:
-      context: ./
-      dockerfile: ./Dockerfile
+  sp-server:
+    image: cdcautomation/student-portal-server:latest
     env_file:
       - .env
     environment:
       DB_HOST: "mysqldb"
     ports:
-      - "3000:3000"
+      - 3001:3001
     depends_on:
       - mysqldb
       - adminer
-    volumes:
-      - ./src:/usr/src/app/src
-      - /usr/src/app/node_modules
     command: npm run start:dev

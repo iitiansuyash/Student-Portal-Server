@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import winston = require("winston");
 import { isDevEnvironment } from "../constants";
 

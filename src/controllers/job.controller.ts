@@ -10,7 +10,6 @@ import { NF_Repository } from "../repositories/job.repository";
 import { createNF, fetchNF, removeNF, updateNF } from "../services/nf.service";
 import { Notification_Form_spoc } from "../entity/Notification_Form_spoc";
 import { HR_POC_NF } from "../entity/HR_POC_NF";
-import { NF_Applications } from "../entity/NF_Applications";
 import { NF_Shortlisting } from "../entity/NF_Shortlisting";
 
 const createCompanyData = (company_details) => {
