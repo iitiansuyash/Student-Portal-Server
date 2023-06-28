@@ -26,7 +26,7 @@ export const SignIn = async (
 
   try {
     // MIS Login for students (currently a dummy check is implemented - Has to replaced with original check API)
-    const student: Student | undefined = await authService.validateStudent(
+    const student: Student | null = await authService.validateStudent(
       username,
       password
     );
