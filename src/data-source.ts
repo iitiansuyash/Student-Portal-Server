@@ -5,7 +5,7 @@ import { env } from './config';
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: env.db.host,
-    port: parseInt(env.db.port),
+    port: parseInt(env.db.port as string, 10),
     username: env.db.username,
     password: env.db.password,
     database: env.db.name,

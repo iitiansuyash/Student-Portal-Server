@@ -5,7 +5,7 @@ import * as userService from './student.service';
 export const validateStudent = async (
   username: string,
   password: string
-): Promise<Student> => {
+): Promise<Student | null> => {
   const student = await studentRepository.findOne({
     where: {
       admno: username,
@@ -21,5 +21,5 @@ export const validateStudent = async (
   if (student && password) {
     return await userService.fetchStudent(student.admno);
   }
-  return undefined;
+  return null;
 };

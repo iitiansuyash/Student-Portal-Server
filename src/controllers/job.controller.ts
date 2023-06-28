@@ -25,7 +25,7 @@ const createCompanyData = (company_details) => {
 };
 
 const createEligibilityData = (eligible_courses, nfId?) => {
-  const eligibilityList = [];
+  const eligibilityList: NF_Branch_Eligibility[] = [];
 
   eligible_courses?.forEach((eligible_course) => {
     const course = new NF_Branch_Eligibility();
@@ -43,7 +43,7 @@ const createEligibilityData = (eligible_courses, nfId?) => {
 };
 
 const createStagesData = (schedule, nfId?) => {
-  const stagesList = [];
+  const stagesList: NF_Job_Stages[] = [];
 
   schedule?.forEach((step, index) => {
     const newStage = new NF_Job_Stages();
@@ -61,7 +61,7 @@ const createStagesData = (schedule, nfId?) => {
 };
 
 const createDocsData = (docs, nfId?) => {
-  const docsList = [];
+  const docsList: NF_Supporting_Docs[] = [];
 
   docs?.forEach(doc => {
     const newDoc = new NF_Supporting_Docs();
@@ -77,7 +77,7 @@ const createDocsData = (docs, nfId?) => {
 }
 
 const createSpocData = (spocs, nfId?) => {
-  const spocList = [];
+  const spocList: Notification_Form_spoc[] = [];
 
   spocs?.forEach(spoc => {
     const newSpoc = new Notification_Form_spoc();
@@ -93,7 +93,7 @@ const createSpocData = (spocs, nfId?) => {
 }
 
 const createHRData = (hrs) => {
-  const hrList = [];
+  const hrList: HR_POC_NF[] = [];
 
   hrs?.forEach((hr) => {
     const newHr = new HR_POC_NF();
@@ -250,7 +250,7 @@ export const updateJob = async (
     // update the rest sections one by one
 
     // updating nfEligibility section
-    await AppDataSource.getRepository("NF_Branch_Eligibility").remove(
+    newJob && await AppDataSource.getRepository("NF_Branch_Eligibility").remove(
       newJob.nfEligibility
     );
     await AppDataSource.getRepository("NF_Branch_Eligibility").save(
@@ -258,7 +258,7 @@ export const updateJob = async (
     );
 
     // updating nf_stages section
-    await AppDataSource.getRepository("NF_Job_Stages").remove(newJob.nf_stages);
+    newJob && await AppDataSource.getRepository("NF_Job_Stages").remove(newJob.nf_stages);
     await AppDataSource.getRepository("NF_Job_Stages").save(
       createStagesData(nf_stages, parseInt(jobId))
     );
