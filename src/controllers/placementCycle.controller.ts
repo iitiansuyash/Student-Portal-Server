@@ -11,16 +11,6 @@ import { logger } from '../utils/logger';
 import { checkPlacementCycleEligibility } from "../services/placementcycle.service";
 import { enrollInPlacementCycle } from "../services/placementcycleenrollment.service";
 import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
-interface SpecializationDataType {
-  specId: number;
-  specName: string;
-  disciplineId: number;
-  disciplineName: string;
-  deptId: number;
-  deptName: string;
-  courseId: number;
-  courseName: string;
-}
 
 const createCycleSpecRel = (spec) => {
   const specRel = new Specialization_Placementcycle_rel();
@@ -246,16 +236,15 @@ export const updateSpecializationForCycle = async (
 export const enrollStudent = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   const { placementCycleId } = req.params;
   const { admno } = req.body;
-  let eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
+  const eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
   if (!eligible)
     return res.status(400).json({
       success: false, message: "Student is not eligible"
     })
-  let enrollment = new Placement_Cycle_Enrolment();
+  const enrollment = new Placement_Cycle_Enrolment();
   enrollment.admno = admno
   enrollment.placementCycleId = Number(placementCycleId);
   await enrollInPlacementCycle(enrollment);

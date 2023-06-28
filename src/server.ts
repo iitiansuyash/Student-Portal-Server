@@ -27,6 +27,7 @@ const CreateServer = () => {
   });
 
   process.on("uncaughtException", (error: Error) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     errorHandler.handleError(error);
     if (!errorHandler.isTrustedError(error)) {
       process.exit(1);

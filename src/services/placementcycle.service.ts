@@ -20,7 +20,7 @@ export const update = async (placementCycleId: number, updatedCycleDetails: Plac
 }
 
 export const checkPlacementCycleEligibility = async (admno: string, placementCycleId: number) => {
-  let placemnetCycleGraduatingYear = (await findById(placementCycleId)).graduatingYear;
-  let studentGraduatingYear = (await fetchStudent(admno)).graduatingYear;
+  const placemnetCycleGraduatingYear = (await findById(placementCycleId)).graduatingYear;
+  const studentGraduatingYear = (await fetchStudent(admno)).graduatingYear;
   return placemnetCycleGraduatingYear === studentGraduatingYear;
 }
