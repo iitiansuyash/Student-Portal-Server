@@ -16,7 +16,9 @@ export const fetchNoticesForCycles = async (
     const notices =
       cycleIds && cycleIds.length > 0
         ? await AppDataSource.query(`
-            SELECT * FROM Notices AS n
+            SELECT n.*, u.name as postedBy FROM Notices AS n
+            LEFT JOIN user AS u
+            ON u.id = n.userId
             WHERE n.placementCycleId IN (${cycleIds})
         `)
         : [];
