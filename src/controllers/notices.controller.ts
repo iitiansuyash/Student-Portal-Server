@@ -1,9 +1,15 @@
 import { NextFunction, Request, Response } from "express";
 import { Notices } from "../entity/Notices";
-import { AppDataSource } from "../data-source";
 import { UserRequest } from "../middleware/isAuthorized";
 import { NotFoundError } from "../utils/error/notFoundError";
 import * as placementCycleService from "../services/placementcycle.service";
+import * as noticeService from "../services/notice.service";
+
+interface UpdatedNotice {
+  title: string;
+  description: string;
+  placementCycleId: number;
+}
 
 export const fetchNoticesForCycles = async (
   req: Request,
@@ -15,12 +21,7 @@ export const fetchNoticesForCycles = async (
 
     const notices =
       cycleIds && cycleIds.length > 0
-        ? await AppDataSource.query(`
-            SELECT n.*, u.name as postedBy FROM Notices AS n
-            LEFT JOIN user AS u
-            ON u.id = n.userId
-            WHERE n.placementCycleId IN (${cycleIds})
-        `)
+        ? await noticeService.fetchNoticesForCycles(cycleIds)
         : [];
 
     res.status(201).json({ success: true, notices });
@@ -44,14 +45,71 @@ export const createNotice = async (
 
     if (!placementCycle) throw new NotFoundError();
 
-    const notice = await AppDataSource.getRepository(Notices).save({ ...req.body, placementCycle, user });
+    await noticeService.create({
+      ...req.body,
+      placementCycle,
+      user,
+    });
 
-    notice.placementCycleId = notice.placementCycle?.placementCycleId;
-    notice.placementCycle = undefined;
-    notice.userId = notice.user?.id;
-    notice.user = undefined;
+    res
+      .status(201)
+      .json({ succes: true, message: "Notice created successfully!!" });
+  } catch (error) {
+    return next(error);
+  }
+};
 
-    res.status(201).json({ succes: true, notice });
+export const updateNotice = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+): Promise<Notices | void> => {
+  try {
+    const user = req.user;
+    const noticeId = req.params.noticeId;
+    const { title, description, placementCycleId }: UpdatedNotice = req.body;
+
+    const notice = await noticeService.findById(parseInt(noticeId, 10));
+
+    if (!notice) throw new NotFoundError();
+
+    const placementCycle = await placementCycleService.findById(
+      placementCycleId
+    );
+
+    if (!placementCycle) throw new NotFoundError();
+
+    await noticeService.update({
+      ...notice,
+      title,
+      description,
+      placementCycle,
+      user,
+    });
+
+    res
+      .status(201)
+      .json({ succes: true, message: "Notice updated successfully!!" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteNotice = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const noticeId = req.params.noticeId;
+
+    const notice = await noticeService.findById(parseInt(noticeId, 10));
+
+    if (!notice) throw new NotFoundError();
+
+    await noticeService.remove(parseInt(noticeId, 10));
+
+    return res.status(201).json({ succes: true, message: 'Notice deleted Successfully!!' });
   } catch (error) {
     return next(error);
   }

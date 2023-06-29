@@ -8,5 +8,7 @@ const router = express.Router();
 
 router.post('/', noticeController.fetchNoticesForCycles);
 router.post('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, noticeController.createNotice);
+router.put('/admin/:noticeId', isAuthorized, isAdminMiddleware, noticeController.updateNotice);
+router.delete('/admin/:noticeId', isAuthorized, isAdminMiddleware, noticeController.deleteNotice);
 
 export default router;
