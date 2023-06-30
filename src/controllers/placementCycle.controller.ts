@@ -9,7 +9,7 @@ import { Placementcycle_Repository } from "../repositories/placementcycle.reposi
 import { NotFoundError } from "../utils/error/notFoundError";
 import { logger } from '../utils/logger';
 import { checkPlacementCycleEligibility, fetchEligiblePlacementCycles } from "../services/placementcycle.service";
-import { enrollInPlacementCycle, enrolledPlacementCycles } from "../services/placementcycleenrollment.service";
+import { _enrollInPlacementCycle, _enrolledPlacementCycles } from "../services/placementcycleenrollment.service";
 import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
 interface SpecializationDataType {
   specId: number;
@@ -96,7 +96,7 @@ export const fetchEnrolledPlacementCycle = async (
 ): Promise<Placementcycle | void> => {
   try {
     const admno = req?.user?.admno;
-    const cycles = await enrolledPlacementCycles(admno);
+    const cycles = await _enrolledPlacementCycles(admno);
     res.status(201).json({ success: true, cycles });
   } catch (error) {
     return next(error);
@@ -265,7 +265,7 @@ export const enrollStudent = async (
     let enrollment = new Placement_Cycle_Enrolment();
     enrollment.admno = admno
     enrollment.placementCycleId = Number(placementCycleId);
-    await enrollInPlacementCycle(enrollment);
+    await _enrollInPlacementCycle(enrollment);
     return res.status(200).json({ success: true, message: "Enrolled Sucessfully" });
   } catch (error) {
     return next(error)
