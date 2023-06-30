@@ -4,7 +4,7 @@ import { Spec_Offered_Acadyear } from "./Spec_Offered_Acadyear";
 import { IsNotEmpty } from 'class-validator';
 
 @Entity()
-export class Academic_Year{
+export class Academic_Year {
 
     @PrimaryColumn({ type: 'varchar', length: 10 })
     public year: string

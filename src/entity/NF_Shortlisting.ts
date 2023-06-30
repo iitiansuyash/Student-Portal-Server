@@ -1,10 +1,6 @@
-import { IsNotEmpty } from "class-validator";
-import { Column, Entity, IsNull, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Notification_Form } from "./Notification_Form";
-import { Specialization } from "./Specialization";
-import { join } from "path";
 import { Student } from "./Student";
-import { Student_cvs } from "./Student_cvs";
 
 @Entity()
 export class NF_Shortlisting {

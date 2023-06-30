@@ -11,16 +11,6 @@ import { logger } from '../utils/logger';
 import { checkPlacementCycleEligibility, fetchEligiblePlacementCycles } from "../services/placementcycle.service";
 import { _enrollInPlacementCycle, _enrolledPlacementCycles } from "../services/placementcycleenrollment.service";
 import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
-interface SpecializationDataType {
-  specId: number;
-  specName: string;
-  disciplineId: number;
-  disciplineName: string;
-  deptId: number;
-  deptName: string;
-  courseId: number;
-  courseName: string;
-}
 
 const createCycleSpecRel = (spec) => {
   const specRel = new Specialization_Placementcycle_rel();

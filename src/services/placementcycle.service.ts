@@ -3,15 +3,15 @@ import { Placementcycle_Repository } from "../repositories/placementcycle.reposi
 import { fetchStudent } from "./student.service";
 export const create = async (
   placementCycle: Placementcycle
-): Promise<Placementcycle | undefined> => {
+): Promise<Placementcycle | null> => {
   return await Placementcycle_Repository.save(placementCycle);
 };
 
-export const findAll = async (): Promise<Placementcycle[] | undefined> => {
+export const findAll = async (): Promise<Placementcycle[] | null> => {
   return await Placementcycle_Repository.find();
 };
 
-export const findById = async (placementCycleId: number): Promise<Placementcycle | undefined> => {
+export const findById = async (placementCycleId: number): Promise<Placementcycle | null> => {
   return await Placementcycle_Repository.findOne({ where: { placementCycleId } });
 }
 
@@ -20,13 +20,13 @@ export const update = async (placementCycleId: number, updatedCycleDetails: Plac
 }
 
 export const checkPlacementCycleEligibility = async (admno: string, placementCycleId: number) => {
-  const placemnetCycleGraduatingYear = (await findById(placementCycleId)).graduatingYear.year;
-  const studentGraduatingYear = (await fetchStudent(admno)).graduatingYear.year;
+  const placemnetCycleGraduatingYear = (await findById(placementCycleId))?.graduatingYear.year;
+  const studentGraduatingYear = (await fetchStudent(admno))?.graduatingYear.year;
   return placemnetCycleGraduatingYear === studentGraduatingYear;
 }
 
 export const fetchEligiblePlacementCycles = async (admno: string) => {
-  const graduatingYear = (await fetchStudent(admno)).graduatingYear.year;
+  const graduatingYear = (await fetchStudent(admno))?.graduatingYear.year;
   const cycles = await Placementcycle_Repository.query(`
   SELECT * FROM placementcycle WHERE graduatingYear = ${graduatingYear}; 
   `);
