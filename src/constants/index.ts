@@ -19,6 +19,6 @@ export const CookieOptions: CookieOptions = {
     maxAge: 60 * 24 * 60 * 60 * 1000,
 };
 
-export const isDevEnvironment = () : boolean => {
+export const isDevEnvironment = (): boolean => {
     return env.node === 'development'
 }
