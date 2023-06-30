@@ -82,7 +82,7 @@ export const getEligiblePlacementCycles = async (
 ) => {
   try {
     const admno = req?.user?.admno;
-    let cycles = await fetchEligiblePlacementCycles(admno);
+    const cycles = await fetchEligiblePlacementCycles(admno);
     res.status(200).send({ success: true, cycles })
   } catch (error) {
     return next(error);
@@ -256,13 +256,13 @@ export const enrollStudent = async (
   try {
     const { placementCycleId } = req.params;
     const admno = req?.user?.admno;
-    let eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
+    const eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
     if (!eligible)
       return res.status(400).json({
         success: false, message: "Student is not eligible"
       })
 
-    let enrollment = new Placement_Cycle_Enrolment();
+    const enrollment = new Placement_Cycle_Enrolment();
     enrollment.admno = admno
     enrollment.placementCycleId = Number(placementCycleId);
     await _enrollInPlacementCycle(enrollment);
