@@ -8,8 +8,8 @@ import { Academic_Year } from "../entity/Academic_Year";
 import { Placementcycle_Repository } from "../repositories/placementcycle.repository";
 import { NotFoundError } from "../utils/error/notFoundError";
 import { logger } from '../utils/logger';
-import { checkPlacementCycleEligibility } from "../services/placementcycle.service";
-import { enrollInPlacementCycle } from "../services/placementcycleenrollment.service";
+import { checkPlacementCycleEligibility, fetchEligiblePlacementCycles } from "../services/placementcycle.service";
+import { _enrollInPlacementCycle, _enrolledPlacementCycles } from "../services/placementcycleenrollment.service";
 import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
 
 const createCycleSpecRel = (spec) => {
@@ -65,6 +65,20 @@ export const fetchAllPlacementCycles = async (
   }
 };
 
+export const getEligiblePlacementCycles = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const admno = req?.user?.admno;
+    const cycles = await fetchEligiblePlacementCycles(admno);
+    res.status(200).send({ success: true, cycles })
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export const fetchEnrolledPlacementCycle = async (
   req: UserRequest,
   res: Response,
@@ -72,16 +86,7 @@ export const fetchEnrolledPlacementCycle = async (
 ): Promise<Placementcycle | void> => {
   try {
     const admno = req?.user?.admno;
-
-    const cycles = await AppDataSource.query(`
-            SELECT * FROM placementcycle AS pc
-            WHERE pc.placementCycleId IN (
-                SELECT DISTINCT pce.placementCycleId
-                FROM placement_cycle_enrolment as pce
-                WHERE pce.admno = '${admno}'
-            )
-        `);
-
+    const cycles = await _enrolledPlacementCycles(admno);
     res.status(201).json({ success: true, cycles });
   } catch (error) {
     return next(error);
@@ -234,19 +239,25 @@ export const updateSpecializationForCycle = async (
 };
 
 export const enrollStudent = async (
-  req: Request,
+  req: UserRequest,
   res: Response,
+  next: NextFunction
 ) => {
-  const { placementCycleId } = req.params;
-  const { admno } = req.body;
-  const eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
-  if (!eligible)
-    return res.status(400).json({
-      success: false, message: "Student is not eligible"
-    })
-  const enrollment = new Placement_Cycle_Enrolment();
-  enrollment.admno = admno
-  enrollment.placementCycleId = Number(placementCycleId);
-  await enrollInPlacementCycle(enrollment);
-  return res.status(200).json({ success: true, message: "Enrolled Sucessfully" });
+  try {
+    const { placementCycleId } = req.params;
+    const admno = req?.user?.admno;
+    const eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
+    if (!eligible)
+      return res.status(400).json({
+        success: false, message: "Student is not eligible"
+      })
+
+    const enrollment = new Placement_Cycle_Enrolment();
+    enrollment.admno = admno
+    enrollment.placementCycleId = Number(placementCycleId);
+    await _enrollInPlacementCycle(enrollment);
+    return res.status(200).json({ success: true, message: "Enrolled Sucessfully" });
+  } catch (error) {
+    return next(error)
+  }
 }

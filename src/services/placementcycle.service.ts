@@ -20,7 +20,16 @@ export const update = async (placementCycleId: number, updatedCycleDetails: Plac
 }
 
 export const checkPlacementCycleEligibility = async (admno: string, placementCycleId: number) => {
-  const placemnetCycleGraduatingYear = (await findById(placementCycleId))?.graduatingYear;
-  const studentGraduatingYear = (await fetchStudent(admno))?.graduatingYear;
+  const placemnetCycleGraduatingYear = (await findById(placementCycleId))?.graduatingYear.year;
+  const studentGraduatingYear = (await fetchStudent(admno))?.graduatingYear.year;
   return placemnetCycleGraduatingYear === studentGraduatingYear;
 }
+
+export const fetchEligiblePlacementCycles = async (admno: string) => {
+  const graduatingYear = (await fetchStudent(admno))?.graduatingYear.year;
+  const cycles = await Placementcycle_Repository.query(`
+  SELECT * FROM placementcycle WHERE graduatingYear = ${graduatingYear}; 
+  `);
+  return cycles;
+}
+
