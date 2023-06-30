@@ -12,6 +12,7 @@ const router = express.Router();
 */
 router.get('/admin', isAuthorized, isAdminMiddleware, placementCycleController.fetchAllPlacementCycles);
 router.get('/enrolled', isAuthorized, placementCycleController.fetchEnrolledPlacementCycle);
+router.get('/eligible', isAuthorized, placementCycleController.eligiblePlacementCycles)
 router.post('/admin', isAuthorized, isAdminMiddleware, placementCycleController.createNewPlacementCycle);
 router.get('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.fetchPlacementCycleById);
 router.put('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, placementCycleController.updatePlacementCycle);

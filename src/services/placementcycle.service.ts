@@ -24,3 +24,11 @@ export const checkPlacementCycleEligibility = async (admno: string, placementCyc
   let studentGraduatingYear = (await fetchStudent(admno)).graduatingYear;
   return placemnetCycleGraduatingYear === studentGraduatingYear;
 }
+
+export const fetchEligiblePlacementCycles = async (admno: string) => {
+  let studentGraduatingYear = (await fetchStudent(admno)).graduatingYear;
+  let placementCycles = await Placementcycle_Repository.query(`
+  SELECT * FROM placementcycle WHERE graduatingYear = ${studentGraduatingYear}; 
+  `);
+  return placementCycles;
+}

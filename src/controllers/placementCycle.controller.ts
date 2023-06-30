@@ -8,9 +8,10 @@ import { Academic_Year } from "../entity/Academic_Year";
 import { Placementcycle_Repository } from "../repositories/placementcycle.repository";
 import { NotFoundError } from "../utils/error/notFoundError";
 import { logger } from '../utils/logger';
-import { checkPlacementCycleEligibility } from "../services/placementcycle.service";
+import { checkPlacementCycleEligibility, fetchEligiblePlacementCycles } from "../services/placementcycle.service";
 import { enrollInPlacementCycle } from "../services/placementcycleenrollment.service";
 import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
+import { error } from "console";
 interface SpecializationDataType {
   specId: number;
   specName: string;
@@ -74,6 +75,20 @@ export const fetchAllPlacementCycles = async (
     return next(error);
   }
 };
+
+export const eligiblePlacementCycles = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const admno = req?.user?.admno;
+    const cycles = await fetchEligiblePlacementCycles(admno);
+    res.status(200).send({ success: true, cycles })
+  } catch (error) {
+    return next(error);
+  }
+}
 
 export const fetchEnrolledPlacementCycle = async (
   req: UserRequest,
