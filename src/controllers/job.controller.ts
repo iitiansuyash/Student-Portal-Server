@@ -26,7 +26,7 @@ const createCompanyData = (company_details) => {
 };
 
 const createEligibilityData = (eligible_courses, nfId?) => {
-  const eligibilityList = [];
+  const eligibilityList: NF_Branch_Eligibility[] = [];
 
   eligible_courses?.forEach((eligible_course) => {
     const course = new NF_Branch_Eligibility();
@@ -44,7 +44,7 @@ const createEligibilityData = (eligible_courses, nfId?) => {
 };
 
 const createStagesData = (schedule, nfId?) => {
-  const stagesList = [];
+  const stagesList: NF_Job_Stages[] = [];
 
   schedule?.forEach((step, index) => {
     const newStage = new NF_Job_Stages();
@@ -62,7 +62,7 @@ const createStagesData = (schedule, nfId?) => {
 };
 
 const createDocsData = (docs, nfId?) => {
-  const docsList = [];
+  const docsList: NF_Supporting_Docs[] = [];
 
   docs?.forEach(doc => {
     const newDoc = new NF_Supporting_Docs();
@@ -78,7 +78,7 @@ const createDocsData = (docs, nfId?) => {
 }
 
 const createSpocData = (spocs, nfId?) => {
-  const spocList = [];
+  const spocList: Notification_Form_spoc[] = [];
 
   spocs?.forEach(spoc => {
     const newSpoc = new Notification_Form_spoc();
@@ -86,15 +86,15 @@ const createSpocData = (spocs, nfId?) => {
     newSpoc.nfId = nfId;
     newSpoc.scpt = spoc.scpt;
     newSpoc.isPrimary = spoc.isPrimary;
-    if(newSpoc.scpt)
-    spocList.push(newSpoc);
+    if (newSpoc.scpt)
+      spocList.push(newSpoc);
   });
 
   return spocList;
 }
 
 const createHRData = (hrs) => {
-  const hrList = [];
+  const hrList: HR_POC_NF[] = [];
 
   hrs?.forEach((hr) => {
     const newHr = new HR_POC_NF();
@@ -454,7 +454,7 @@ export const fetchJobsForAdmin = async (
   }
 };
 
-export const searchJobsForAdmin = async (req: Request, res: Response, next: NextFunction) : Promise<Notification_Form | void> => {
+export const searchJobsForAdmin = async (req: Request, res: Response, next: NextFunction): Promise<Notification_Form | void> => {
   try {
     const { placementCycleId, query } = req.params;
 
@@ -515,7 +515,7 @@ export const updateJob = async (
     // update the rest sections one by one
 
     // updating nfEligibility section
-    await AppDataSource.getRepository("NF_Branch_Eligibility").remove(
+    newJob && await AppDataSource.getRepository("NF_Branch_Eligibility").remove(
       newJob.nfEligibility
     );
     await AppDataSource.getRepository("NF_Branch_Eligibility").save(
@@ -523,7 +523,7 @@ export const updateJob = async (
     );
 
     // updating nf_stages section
-    await AppDataSource.getRepository("NF_Job_Stages").remove(newJob.nf_stages);
+    newJob && await AppDataSource.getRepository("NF_Job_Stages").remove(newJob.nf_stages);
     await AppDataSource.getRepository("NF_Job_Stages").save(
       createStagesData(nf_stages, parseInt(jobId))
     );
@@ -624,3 +624,68 @@ export const deleteJob = async (
     return next(error);
   }
 };
+
+export const getApplicants = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+): Promise<Notification_Form | void> => {
+  try {
+    const { jobId } = req.params;
+    console.log(jobId);
+
+    const applicants = await AppDataSource.query(`
+    SELECT nf_applications.cvId, nf_applications.admno, student.first_name, 
+    student.last_name, student.phonePref, student.phone, student.dob, student.gender, 
+    student.instiMailId, student.personalMailId, student.isPWD, student.category,
+    student.isEWS, student.graduatingYear FROM studentportal.nf_applications, 
+    studentportal.student WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = student.admno; 
+  `);
+
+
+    res.status(200).json({ success: true, applicants })
+
+  } catch (error) {
+    return next(error)
+  }
+};
+
+export const shortlistStudent = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+
+
+    const { listType, seqNo, admno, finalCTC } = req.body
+    const { jobId } = req.params
+    // check applied for the company??
+    const applied = await AppDataSource.query(`
+     SELECT * FROM studentportal.nf_applications WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = "${admno}";
+  `)
+    if (!applied) return res.status(400).json({ success: false, message: "Student not applied for this Job" });
+
+    // check for alredy placed
+    const placed = await AppDataSource.query(` 
+  SELECT * FROM studentportal.nf_shortlisting 
+  JOIN nf_job_stages ON nf_shortlisting.nfId = nf_job_stages.nfId 
+  and nf_shortlisting.seqNo = nf_job_stages.seqNo 
+  WHERE nf_job_stages.isFinalRound = 1 and nf_shortlisting.admno = "${admno}";
+  `);
+    if (placed) return res.status(400).json({ success: false, message: "Student already placed" });
+
+    const shortlistingStudent = new NF_Shortlisting()
+    shortlistingStudent.nfId = Number(jobId);
+    shortlistingStudent.seqNo = Number(seqNo);
+    shortlistingStudent.admno = admno;
+    shortlistingStudent.listType = listType;
+    shortlistingStudent.finalCTC = finalCTC
+    // //  add in nf_shortlisting
+    await AppDataSource.getRepository('NF_Shortlisting').save(shortlistingStudent);
+
+    return res.status(200).json({ success: true, message: "Student added to shortlist" });
+  } catch (error) {
+    return next(error)
+  }
+}

@@ -8,17 +8,9 @@ import { Academic_Year } from "../entity/Academic_Year";
 import { Placementcycle_Repository } from "../repositories/placementcycle.repository";
 import { NotFoundError } from "../utils/error/notFoundError";
 import { logger } from '../utils/logger';
-
-interface SpecializationDataType {
-  specId: number;
-  specName: string;
-  disciplineId: number;
-  disciplineName: string;
-  deptId: number;
-  deptName: string;
-  courseId: number;
-  courseName: string;
-}
+import { checkPlacementCycleEligibility, fetchEligiblePlacementCycles } from "../services/placementcycle.service";
+import { _enrollInPlacementCycle, _enrolledPlacementCycles } from "../services/placementcycleenrollment.service";
+import { Placement_Cycle_Enrolment } from "../entity/Placement_Cycle_Enrolment";
 
 const createCycleSpecRel = (spec) => {
   const specRel = new Specialization_Placementcycle_rel();
@@ -73,6 +65,20 @@ export const fetchAllPlacementCycles = async (
   }
 };
 
+export const getEligiblePlacementCycles = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const admno = req?.user?.admno;
+    const cycles = await fetchEligiblePlacementCycles(admno);
+    res.status(200).send({ success: true, cycles })
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export const fetchEnrolledPlacementCycle = async (
   req: UserRequest,
   res: Response,
@@ -80,16 +86,7 @@ export const fetchEnrolledPlacementCycle = async (
 ): Promise<Placementcycle | void> => {
   try {
     const admno = req?.user?.admno;
-
-    const cycles = await AppDataSource.query(`
-            SELECT * FROM placementcycle AS pc
-            WHERE pc.placementCycleId IN (
-                SELECT DISTINCT pce.placementCycleId
-                FROM placement_cycle_enrolment as pce
-                WHERE pce.admno = '${admno}'
-            )
-        `);
-
+    const cycles = await _enrolledPlacementCycles(admno);
     res.status(201).json({ success: true, cycles });
   } catch (error) {
     return next(error);
@@ -142,7 +139,7 @@ export const fetchPlacementCycleById = async (
 
     res.status(201).json({
       success: true,
-      placementCycle: {...placementCycle, graduatingYear: placementCycle.graduatingYear.year},
+      placementCycle: { ...placementCycle, graduatingYear: placementCycle.graduatingYear.year },
       specializations
     });
   } catch (error) {
@@ -209,14 +206,14 @@ export const updateSpecializationForCycle = async (
 
 
     logger.info('Remove the specializations for that cycle');
-    if(specToRemove && specToRemove.length>0)
-    await AppDataSource.getRepository(Specialization_Placementcycle_rel).createQueryBuilder(
-      "Specialization_placementcycle_rel"
-    )
-      .delete()
-      .where(
-        `specId IN (${specToRemove}) AND placementCycleId = ${parseInt(placementCycleId)}`
-      ).execute();
+    if (specToRemove && specToRemove.length > 0)
+      await AppDataSource.getRepository(Specialization_Placementcycle_rel).createQueryBuilder(
+        "Specialization_placementcycle_rel"
+      )
+        .delete()
+        .where(
+          `specId IN (${specToRemove}) AND placementCycleId = ${parseInt(placementCycleId)}`
+        ).execute();
 
     const specToInsert = specializationIds.map((id) => ({
       specId: id,
@@ -224,14 +221,14 @@ export const updateSpecializationForCycle = async (
     }));
 
     logger.info('Insert new Specialization Ids List');
-    if(specToInsert && specToInsert.length>0)
-    await AppDataSource.getRepository(Specialization_Placementcycle_rel).upsert(
-      specToInsert,
-      {
-        conflictPaths: ["placementCycleId", "specId"],
-        skipUpdateIfNoValuesChanged: true,
-      }
-    );
+    if (specToInsert && specToInsert.length > 0)
+      await AppDataSource.getRepository(Specialization_Placementcycle_rel).upsert(
+        specToInsert,
+        {
+          conflictPaths: ["placementCycleId", "specId"],
+          skipUpdateIfNoValuesChanged: true,
+        }
+      );
 
     res
       .status(201)
@@ -240,3 +237,27 @@ export const updateSpecializationForCycle = async (
     return next(error);
   }
 };
+
+export const enrollStudent = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { placementCycleId } = req.params;
+    const admno = req?.user?.admno;
+    const eligible = await checkPlacementCycleEligibility(admno, Number(placementCycleId))
+    if (!eligible)
+      return res.status(400).json({
+        success: false, message: "Student is not eligible"
+      })
+
+    const enrollment = new Placement_Cycle_Enrolment();
+    enrollment.admno = admno
+    enrollment.placementCycleId = Number(placementCycleId);
+    await _enrollInPlacementCycle(enrollment);
+    return res.status(200).json({ success: true, message: "Enrolled Sucessfully" });
+  } catch (error) {
+    return next(error)
+  }
+}

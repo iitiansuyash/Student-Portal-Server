@@ -21,7 +21,7 @@ interface CreateStudentBody {
     uidValue: string,
 }
 
-const createNewStudentData = async (studentData: CreateStudentBody) : Promise<Student> => {
+const createNewStudentData = (studentData: CreateStudentBody) : Student => {
     let student = new Student();
     student = { ...student, ...studentData };
     return student;
@@ -82,7 +82,7 @@ export const createBulk = async (req: Request, res: Response, next: NextFunction
     const students = req.body;
 
     try {
-        students.map(async (user: CreateStudentBody) => await userService.create(await createNewStudentData(user)));
+        await students.map(async (user: CreateStudentBody) => await userService.create(await createNewStudentData(user)));
 
         res.status(200).json({ success: true, message: 'Users added successfully' });
     } catch (error) {

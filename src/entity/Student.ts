@@ -58,13 +58,6 @@ export class Student {
     })
     public gender: string
 
-    @IsNotEmpty()
-    @Column({
-        type: "enum",
-        enum: Category,
-        default: Category.GENERAL,
-    })
-    public category: string
 
     @IsNotEmpty()
     @Column("varchar", { length: 100 })
@@ -77,6 +70,14 @@ export class Student {
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
     public isPWD: number
+
+    @IsNotEmpty()
+    @Column({
+        type: "enum",
+        enum: Category,
+        default: Category.GENERAL,
+    })
+    public category: string
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })
@@ -103,7 +104,7 @@ export class Student {
     @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
     public placementcycles: Placement_Cycle_Enrolment[];
 
-    @ManyToOne(() => Graduation_Year, (year) => year.student)
+    @ManyToOne(() => Graduation_Year, (year) => year.student, { eager: true })
     @JoinColumn({ name: 'graduatingYear' })
     public graduatingYear: Graduation_Year
 

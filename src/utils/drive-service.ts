@@ -28,19 +28,27 @@ interface UploadRequest extends Request {
     }
 }
 
+interface UploadResponse {
+    data: {
+        id: string,
+        name: string,
+        mimeType: string,
+    }
+}
+
 export const uploadFile = async (req: UploadRequest, res: Response, next: NextFunction) => {
     const filePath = req.file.path;
     try {
         const response = await drive.files.create({
             requestBody: {
-                name: req?.file?.originalname || `File-${Date.now()}`,
+                name: req.file.originalname || `File-${Date.now()}`,
                 mimeType: 'application/pdf'
             },
             media: {
                 mimeType: 'application/pdf',
                 body: fs.createReadStream(filePath),
             }
-        });
+        }) as UploadResponse;
 
         const document = new Document();
         document.id = response?.data?.id;

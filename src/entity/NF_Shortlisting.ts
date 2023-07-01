@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { IsNotEmpty } from "class-validator";
 import { Column, Entity, IsNull, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Notification_Form } from "./Notification_Form";
@@ -5,6 +6,11 @@ import { Specialization } from "./Specialization";
 import { join } from "path";
 import { Student } from "./Student";
 import { Student_cvs } from "./Student_cvs";
+=======
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Notification_Form } from "./Notification_Form";
+import { Student } from "./Student";
+>>>>>>> master
 
 @Entity()
 export class NF_Shortlisting {
@@ -18,10 +24,13 @@ export class NF_Shortlisting {
     @PrimaryColumn({ type: "varchar", length: 15 })
     public admno: string
 
+<<<<<<< HEAD
     @IsNotEmpty()
     @Column({ type: 'int' ,default:1})
     public isSelected: number
 
+=======
+>>>>>>> master
     @ManyToOne(() => Notification_Form, (nf) => nf.applicants)
     @JoinColumn({ name: 'nfId' })
     public notificationForm: Notification_Form

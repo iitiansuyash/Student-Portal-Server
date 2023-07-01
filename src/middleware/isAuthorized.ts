@@ -7,7 +7,7 @@ import { UnauthorizedError } from "../utils/error/unauthorizedError";
 import { NotFoundError } from "../utils/error/notFoundError";
 import { env } from "../config";
 
-export interface UserRequest extends Request{
+export interface UserRequest extends Request {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     user: any
 }
@@ -15,21 +15,20 @@ export interface UserRequest extends Request{
 export const isAuthorized = async (req: Request, res: Response, next: NextFunction) => {
     let token = req.cookies?.[`${COOKIE_NAME}`];
 
-    if(req.headers.authorization)
-    {
+    if (req.headers.authorization) {
         token = token || req.headers.authorization.split(' ')[1];
     }
 
-    if(!token)
-    throw new UnauthorizedError();
+    if (!token)
+        throw new UnauthorizedError();
 
     try {
         const decoded = jwt.verify(token, env.jwtSecret);
 
         const user = decoded?.role === ADMIN ? await fetchUser(decoded?.id) : await fetchStudent(decoded?.id);
 
-        if(!user)
-        throw new NotFoundError();
+        if (!user)
+            throw new NotFoundError();
 
         req['user'] = user;
         req['role'] = decoded.role;

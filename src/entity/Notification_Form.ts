@@ -9,19 +9,20 @@ import { NF_Job_Stages } from "./NF_Job_Stages";
 import { NF_Supporting_Docs } from "./NF_Supporting_Docs";
 import { Notification_Form_spoc } from "./Notification_Form_spoc";
 import { Placementcycle } from "./Placementcycle";
+import { NF_Applications } from "./NF_Applications";
 
 export enum NF_Type {
     INF = 'INF',
     JNF = 'JNF'
 }
 
-export enum Status{
+export enum Status {
     DRAFT = 'Draft',
     FINALIZED = 'Finalized'
 }
 
 @Entity()
-export class Notification_Form{
+export class Notification_Form {
 
     @PrimaryGeneratedColumn("increment", { type: 'int' })
     public nfId: number
