@@ -2,7 +2,6 @@ import { IsNotEmpty } from "class-validator";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Company } from "./Company";
 import { HR_POC_NF } from "./HR_POC_NF";
-import { NF_Applications } from "./NF_Applications";
 import { NF_Branch_Eligibility } from "./NF_Branch_Eligibility";
 import { NF_History_Criteria } from "./NF_History_Criteria";
 import { NF_Job_Stages } from "./NF_Job_Stages";

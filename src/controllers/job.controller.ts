@@ -417,7 +417,7 @@ export const applyJobForStudent = async (
   try {
     const {jobId} = req.params;
 
-    if(!isEligible(req['user'].admno,jobId)||isApplied(req['user'].admno,jobId)||!isOpen(jobId))
+    if(!await isEligible(req['user'].admno,jobId)||await isApplied(req['user'].admno,jobId)||!isOpen(jobId))
       res.status(200).json({ success: false, application :"Not Applicable for Job" });
     else{
       const application = new NF_Applications
@@ -538,71 +538,6 @@ export const updateJob = async (
   }
 };
 
-
-export const getApplicants = async (
-  req: UserRequest,
-  res: Response,
-  next: NextFunction
-): Promise<Notification_Form | void> => {
-  try {
-    const { jobId } = req.params;
-    console.log(jobId);
-
-    const applicants = await AppDataSource.query(`
-    SELECT nf_applications.cvId, nf_applications.admno, student.first_name, 
-    student.last_name, student.phonePref, student.phone, student.dob, student.gender, 
-    student.instiMailId, student.personalMailId, student.isPWD, student.category,
-    student.isEWS, student.graduatingYear FROM studentportal.nf_applications, 
-    studentportal.student WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = student.admno; 
-  `);
-
-
-    res.status(200).json({ success: true, applicants })
-
-  } catch (error) {
-    return next(error)
-  }
-};
-
-export const shortlistStudent = async (
-  req: UserRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-
-
-    const { listType, seqNo, admno, finalCTC } = req.body
-    const { jobId } = req.params
-    // check applied for the company??
-    const applied = await AppDataSource.query(`
-     SELECT * FROM studentportal.nf_applications WHERE nf_applications.nfId = ${jobId} and nf_applications.admno = "${admno}";
-  `)
-    if (!applied) return res.status(400).json({ success: false, message: "Student not applied for this Job" });
-
-    // check for alredy placed
-    const placed = await AppDataSource.query(` 
-  SELECT * FROM studentportal.nf_shortlisting 
-  JOIN nf_job_stages ON nf_shortlisting.nfId = nf_job_stages.nfId 
-  and nf_shortlisting.seqNo = nf_job_stages.seqNo 
-  WHERE nf_job_stages.isFinalRound = 1 and nf_shortlisting.admno = "${admno}";
-  `);
-    if (placed) return res.status(400).json({ success: false, message: "Student already placed" });
-
-    const shortlistingStudent = new NF_Shortlisting()
-    shortlistingStudent.nfId = Number(jobId);
-    shortlistingStudent.seqNo = Number(seqNo);
-    shortlistingStudent.admno = admno;
-    shortlistingStudent.listType = listType;
-    shortlistingStudent.finalCTC = finalCTC
-    // //  add in nf_shortlisting
-    await AppDataSource.getRepository('NF_Shortlisting').save(shortlistingStudent);
-
-    return res.status(200).json({ success: true, message: "Student added to shortlist" });
-  } catch (error) {
-    return next(error)
-  }
-}
 
 export const deleteJob = async (
   req: UserRequest,

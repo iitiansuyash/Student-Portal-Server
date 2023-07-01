@@ -1,9 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-<<<<<<< HEAD
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn ,OneToMany } from "typeorm";
-=======
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, OneToMany } from "typeorm";
->>>>>>> master
 import { NF_Applications } from "./NF_Applications";
 import { Student } from "./Student";
 

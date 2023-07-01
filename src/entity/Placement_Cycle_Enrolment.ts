@@ -1,20 +1,13 @@
-<<<<<<< HEAD
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-=======
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
->>>>>>> master
 import { Placementcycle } from "./Placementcycle";
 import { Student } from "./Student";
 
 @Entity()
 export class Placement_Cycle_Enrolment {
 
-<<<<<<< HEAD
-=======
     // @PrimaryGeneratedColumn("increment")
     // public PCEId: number
 
->>>>>>> master
     @PrimaryColumn({ type: "int" })
     public placementCycleId: number
 
