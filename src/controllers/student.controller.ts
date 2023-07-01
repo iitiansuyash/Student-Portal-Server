@@ -27,6 +27,20 @@ const createNewStudentData = async (studentData: CreateStudentBody) : Promise<St
     return student;
 }
 
+export const createStudentProfile = async (
+    req: Request, 
+    res: Response, 
+    next: NextFunction) : Promise<Student | void> => {
+    try {
+        
+        
+
+        res.status(200).json({ success: true});
+    } catch (error) {
+        return next(error);
+    }
+}
+
 export const findStudentById = async (req: Request, res: Response, next: NextFunction) : Promise<Student | void> => {
     const admno = req.params?.admno;
 

@@ -7,6 +7,8 @@ router.get('/:admno', studentController.findStudentById);
 
 router.post('/', studentController.createStudent);
 
+router.post('/profile', studentController.createStudentProfile);
+
 router.get('/', studentController.fetchAllStudents);
 
 router.post('/bulk', studentController.createBulk);

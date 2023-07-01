@@ -172,7 +172,7 @@ const isEligible = async(admno,jobId)=>{
       WHERE stages.nfId = ${jobId} 
     `)
 
-    let studentInfo = await AppDataSource.query(`
+    const studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
       FROM studentportal.student, studentportal.specialization, studentportal.student_studies_spec, studentportal.edu_history, studentportal.placement_cycle_enrolment
       WHERE student.admno = "${admno}" 
@@ -182,7 +182,7 @@ const isEligible = async(admno,jobId)=>{
       and placement_cycle_enrolment.admno = "${admno}"
     `)
 
-    let jobEligibility = await AppDataSource.query(`
+    const jobEligibility = await AppDataSource.query(`
       SELECT specName, cgpaValue, degreeId, percentEquivalent, placementCycleId
       FROM studentportal.NF_Branch_Eligibility, studentportal.specialization, studentportal.nf_history_criteria, studentportal.notification_form
       WHERE NF_Branch_Eligibility.nfId = ${jobId} 
@@ -198,7 +198,7 @@ const isEligible = async(admno,jobId)=>{
     return 0;
   // -> Is Already Placed
   let b=true;
-  for(let stage in hiringWrokflow)
+  for(const stage in hiringWrokflow)
     if(hiringWrokflow[stage].isFinalRound&&hiringWrokflow[stage].isSelected)
       b=false;
   if(!b)
@@ -210,18 +210,18 @@ const isEligible = async(admno,jobId)=>{
 
   // -> Course Eligibility
   b=false;
-  for(let i in jobEligibility)
+  for(const i in jobEligibility)
       if(jobEligibility[i].specName == studentInfo[0].specName)
-        {b=true;break};
+        {b=true;break}
   if(!b)
-    return 0;
+    return 0
 
   // -> Acadamic Eligibility 
   if(jobEligibility[0].cgpaValue>studentInfo[0].cgpaValue)
     return 0;
 
   // -> Education_History Eligibility
-  let n = jobEligibility.length
+  const n = jobEligibility.length
 
   if(jobEligibility[0].percentEquivalent>studentInfo[0].percentEquivalent)
     return 0;
@@ -259,7 +259,7 @@ export const fetchAllJobsForStudent = async (
 
     const jobsForEnrolledCycles = await _jobsForEnrolledCycles(req?.user?.admno);
 
-    for(let job in jobsForEnrolledCycles)
+    for(const job in jobsForEnrolledCycles)
     {
       jobsForEnrolledCycles[job]["is_eligible"] = await isEligible(req?.user?.admno,jobsForEnrolledCycles[job].nfId);
       jobsForEnrolledCycles[job]["is_applied"] = await isApplied(req?.user?.admno,jobsForEnrolledCycles[job].nfId);
@@ -311,8 +311,8 @@ export const fetchJobByIdForStudent=async(
 
     console.log(req['user'].admno)
 
-    
-    let studentInfo = await AppDataSource.query(`
+
+    const studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
       FROM studentportal.student, studentportal.specialization, studentportal.student_studies_spec, studentportal.edu_history, studentportal.placement_cycle_enrolment
       WHERE student.admno = "${req['user'].admno}" 
@@ -322,7 +322,7 @@ export const fetchJobByIdForStudent=async(
       and placement_cycle_enrolment.admno = "${req['user'].admno}"
     `)
 
-    let jobEligibility = await AppDataSource.query(`
+    const jobEligibility = await AppDataSource.query(`
       SELECT specName, cgpaValue, degreeId, percentEquivalent, placementCycleId
       FROM studentportal.NF_Branch_Eligibility, studentportal.specialization, studentportal.nf_history_criteria, studentportal.notification_form
       WHERE NF_Branch_Eligibility.nfId = ${jobId} 
@@ -334,7 +334,7 @@ export const fetchJobByIdForStudent=async(
     // Eligibility Check :
 
     // -> Profile Verification Eligibility
-    let is_profile_verified = {is_eligible : true, message : "Profile Verified"}
+    const is_profile_verified = {is_eligible : true, message : "Profile Verified"}
   
     // -> PlacementCylce Eligibility 
     let placement_cycle_eligibility = {is_eligible : true, message : "Eligible for this Placement Cycle"}
@@ -344,7 +344,7 @@ export const fetchJobByIdForStudent=async(
     // -> Is Already Placed
     let is_not_palced = {is_eligible : true ,message : "Eligible for this job"}
     let b=true;
-    for(let stage in hiring_wrokflow)
+    for(const stage in hiring_wrokflow)
       if(hiring_wrokflow[stage].isFinalRound&&hiring_wrokflow[stage].isSelected)
         b=false;
     if(!b)
@@ -361,9 +361,9 @@ export const fetchJobByIdForStudent=async(
     // -> Course Eligibility
     let course_eligibility = {is_eligible : true, message : "Criteria satisfied"}
     b=false;
-    for(let i in jobEligibility)
+    for(const i in jobEligibility)
         if(jobEligibility[i].specName == studentInfo[0].specName)
-          {b=true;break};
+          {b=true;break}
     if(!b)
       course_eligibility = {is_eligible : false, message : "Criteria not satisfied"};
 
@@ -375,7 +375,7 @@ export const fetchJobByIdForStudent=async(
         message : `Required : ${jobEligibility[0].cgpaValue} , Actual : ${studentInfo[0].cgpaValue}`}
 
     // -> Education_History Eligibility
-    let n = jobEligibility.length
+    const n = jobEligibility.length
 
     let edu_history_10_eligibility = {is_eligible : true ,
       message : `Required : ${jobEligibility[n-1].percentEquivalent} , Actual : ${studentInfo[1].percentEquivalent}`}
@@ -420,13 +420,13 @@ export const applyJobForStudent = async (
     if(!isEligible(req['user'].admno,jobId)||isApplied(req['user'].admno,jobId)||!isOpen(jobId))
       res.status(200).json({ success: false, application :"Not Applicable for Job" });
     else{
-    const application = new NF_Applications
-    application.nfId = parseInt(jobId)
-    application.admno = req['user'].admno
-    application.addedByAdmin=0
-    const job = await createApplication(application)
+      const application = new NF_Applications
+      application.nfId = parseInt(jobId)
+      application.admno = req['user'].admno
+      application.addedByAdmin=0
+      const job = await createApplication(application)
 
-    res.status(200).json({ success: true, application :job });}
+      res.status(200).json({ success: true, application :job });}
   } catch (error) {
     return next(error);
   }
