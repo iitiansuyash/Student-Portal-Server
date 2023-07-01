@@ -21,4 +21,8 @@ export class Document {
     @IsNotEmpty()
     @Column({ type: 'varchar', length: 250 })
     public downloadLink: string
+
+    @IsNotEmpty()
+    @Column({ type: 'varchar', length: 250 })
+    public updateLink: string
 }

@@ -1,5 +1,6 @@
 import { Notification_Form } from "../entity/Notification_Form";
-import { NF_Repository } from "../repositories/job.repository"
+import { NF_Applications_Repository, NF_Repository } from "../repositories/job.repository"
+import { NF_Applications } from "../entity/NF_Applications";
 
 interface Query {
     nfId?: number
@@ -35,4 +36,8 @@ export const removeNF = async (nfId: number): Promise<Notification_Form | undefi
     await NF_Repository.softDelete(nfId);
 
     return nf;
+}
+
+export const createApplication = async (nf_app : NF_Applications):Promise<NF_Applications> => {
+    return await NF_Applications_Repository.save(nf_app);
 }

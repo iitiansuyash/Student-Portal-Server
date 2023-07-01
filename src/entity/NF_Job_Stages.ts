@@ -29,6 +29,10 @@ export class NF_Job_Stages{
     public stage: Selection_Stages
 
     @IsNotEmpty()
+    @Column({ type: 'varchar', length: 45 })
+    public stageName: string
+
+    @IsNotEmpty()
     @Column({ type: "enum", enum: Stage_Type, default: Stage_Type.TECHNICAL })
     public stageType: Stage_Type
 
@@ -38,6 +42,10 @@ export class NF_Job_Stages{
 
     @PrimaryColumn({ type: 'int' })
     public seqNo: number
+
+    @IsNotEmpty()
+    @Column({ type: 'tinyint' })
+    public isCompleted: number
 
     @IsNotEmpty()
     @Column({ type: 'tinyint' })

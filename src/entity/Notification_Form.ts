@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Company } from "./Company";
 import { HR_POC_NF } from "./HR_POC_NF";
-// import { NF_Applications } from "./NF_Applications";
+import { NF_Applications } from "./NF_Applications";
 import { NF_Branch_Eligibility } from "./NF_Branch_Eligibility";
 import { NF_History_Criteria } from "./NF_History_Criteria";
 import { NF_Job_Stages } from "./NF_Job_Stages";
@@ -110,8 +110,8 @@ export class Notification_Form{
     @JoinColumn({ name: 'companyId' })
     public company: Company
 
-    // @OneToMany(() => NF_Applications, (application) => application.notificationForm)
-    // public applications: NF_Applications[]
+    @OneToMany(() => NF_Applications, (nf) => nf.notificationForm)
+    public applicants: NF_Applications[]
 
     @OneToMany(() => NF_Branch_Eligibility, (application) => application.notificationForm, { cascade: true, eager: true })
     public nfEligibility: NF_Branch_Eligibility[]
