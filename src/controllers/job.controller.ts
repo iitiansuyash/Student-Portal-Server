@@ -311,6 +311,7 @@ export const fetchJobByIdForStudent=async(
 
     console.log(req['user'].admno)
 
+    
     let studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
       FROM studentportal.student, studentportal.specialization, studentportal.student_studies_spec, studentportal.edu_history, studentportal.placement_cycle_enrolment
