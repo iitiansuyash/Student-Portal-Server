@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Placementcycle } from "./Placementcycle";
 import { Student } from "./Student";
 

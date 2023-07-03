@@ -19,10 +19,10 @@ router.get('/student/apply/:jobId', isAuthorized, jobController.applyJobForStude
 */
 router.get('/admin/:placementCycleId', isAuthorized, isAdminMiddleware, jobController.fetchJobsForAdmin);
 router.get('/admin/search/:placementCycleId/:query', isAuthorized, isAdminMiddleware, jobController.searchJobsForAdmin);
-router.post('/admin', jobController.createNewJob);
-router.put('/admin/:jobId', jobController.updateJob);
-router.delete('/admin/:jobId', jobController.deleteJob);
-router.get('/admin/:jobId/applicants', jobController.getApplicants);
-router.post('/admin/:jobId/shortlist', jobController.shortlistStudent);
+router.post('/admin',isAuthorized,isAdminMiddleware, jobController.createNewJob);
+router.put('/admin/:jobId',isAuthorized,isAdminMiddleware, jobController.updateJob);
+router.delete('/admin/:jobId',isAuthorized,isAdminMiddleware, jobController.deleteJob);
+router.get('/admin/:jobId/applicants',isAuthorized,isAdminMiddleware, jobController.getApplicants);
+router.post('/admin/:jobId/shortlist',isAuthorized,isAdminMiddleware, jobController.shortlistStudent);
 
 export default router;

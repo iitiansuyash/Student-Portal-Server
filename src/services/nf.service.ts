@@ -1,5 +1,6 @@
 import { Notification_Form } from "../entity/Notification_Form";
-import { NF_Applications_Repository, NF_Repository } from "../repositories/job.repository"
+import { NF_Repository } from "../repositories/job.repository"
+import { NF_Applications_Repository } from "../repositories/appliction.repository"
 import { NF_Applications } from "../entity/NF_Applications";
 
 interface Query {

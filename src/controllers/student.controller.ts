@@ -31,9 +31,12 @@ export const createStudentProfile = async (
     req: Request, 
     res: Response, 
     next: NextFunction) : Promise<Student | void> => {
+        const admno = req.params?.admno;
     try {
         
-        
+        const student = await userService.fetchStudent(admno);
+
+        console.log(student)
 
         res.status(200).json({ success: true});
     } catch (error) {
