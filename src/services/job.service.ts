@@ -1,4 +1,4 @@
-import { AppDataSource } from "../data-source";
+ import { AppDataSource } from "../data-source";
 import { Company } from "../entity/Company";
 import { NF_Branch_Eligibility } from "../entity/NF_Branch_Eligibility";
 import { NF_Job_Stages } from "../entity/NF_Job_Stages";
