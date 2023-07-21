@@ -5,9 +5,6 @@ import { Student } from "./Student";
 @Entity()
 export class Placement_Cycle_Enrolment {
 
-    // @PrimaryGeneratedColumn("increment")
-    // public PCEId: number
-
     @PrimaryColumn({ type: "int" })
     public placementCycleId: number
 

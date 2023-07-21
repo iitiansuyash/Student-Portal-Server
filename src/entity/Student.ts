@@ -1,10 +1,12 @@
-import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn, ManyToOne, JoinColumn, JoinTable } from "typeorm"
 import { IsNotEmpty } from "class-validator";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
 import { Placement_Cycle_Enrolment } from "./Placement_Cycle_Enrolment";
 import { Graduation_Year } from './Graduation_Year';
+import { Edu_History } from './Edu_History';
 import { NF_Applications } from "./NF_Applications";
+import { StudiesSemwiseCgpa } from "./Studies_Semwise_Cgpa";
 
 export enum Gender {
     MALE = "male",
@@ -95,16 +97,25 @@ export class Student {
     @Column("varchar", { length: 45 })
     public uidValue: string
 
-    @OneToMany(() => Student_cvs, (cv) => cv.student)
+    @Column({ type: 'tinyint', default: 0 })
+    public isRegistered: number
+
+    @OneToMany(() => Student_cvs, (cv) => cv.student,{ cascade: true })
     public cvs: Student_cvs[]
 
-    @OneToMany(() => Student_Studies_Spec, (cv) => cv.student)
+    @OneToMany(() => Edu_History, (edu) => edu.student, { cascade: true })
+    public edu_historys: Edu_History[]
+
+    @OneToMany(() => Student_Studies_Spec, (cv) => cv.student,{ cascade: true })
     public specializations: Student_Studies_Spec[]
 
-    @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student)
+    @OneToMany(() => StudiesSemwiseCgpa, (semwise_gpa) => semwise_gpa.student,{ cascade: true })
+    public semwise_gpas: StudiesSemwiseCgpa[]
+
+    @OneToMany(() => Placement_Cycle_Enrolment, placementcycles => placementcycles.student,{ cascade: true })
     public placementcycles: Placement_Cycle_Enrolment[];
 
-    @ManyToOne(() => Graduation_Year, (year) => year.student, { eager: true })
+    @ManyToOne(() => Graduation_Year, (year) => year.student,{ cascade: true, eager: true })
     @JoinColumn({ name: 'graduatingYear' })
     public graduatingYear: Graduation_Year
 

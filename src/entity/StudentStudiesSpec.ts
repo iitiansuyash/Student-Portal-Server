@@ -1,12 +1,11 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Specialization } from "./Specialization";
 import { Student } from "./Student";
-
 @Entity()
 export class Student_Studies_Spec{
 
-    @PrimaryColumn({ type: 'int' })
+    @PrimaryGeneratedColumn( 'increment')
     public study_id: number
 
     @ManyToOne(() => Student, (student) => student.specializations)
