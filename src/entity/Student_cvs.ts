@@ -1,12 +1,12 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn ,OneToMany } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn ,OneToMany } from "typeorm";
 import { NF_Applications } from "./NF_Applications";
 import { Student } from "./Student";
 
 @Entity()
 export class Student_cvs {
 
-    @PrimaryColumn({ type: 'int' })
+    @PrimaryGeneratedColumn({ type: 'int' })
     public cvId: number
 
     @ManyToOne(() => Student, (student) => student.cvs)

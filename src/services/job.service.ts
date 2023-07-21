@@ -1,4 +1,4 @@
- import { AppDataSource } from "../data-source";
+import { AppDataSource } from "../data-source";
 import { Company } from "../entity/Company";
 import { NF_Branch_Eligibility } from "../entity/NF_Branch_Eligibility";
 import { NF_Job_Stages } from "../entity/NF_Job_Stages";
@@ -186,11 +186,15 @@ export const isEligible = async (admno, jobId) => {
         and notification_form.nfId = ${jobId} 
       `)
 
+      console.log(jobEligibility)
+      console.log(studentInfo)
+
     // Eligibility Check :
 
     // -> PlacementCylce Eligibility 
     if (studentInfo[0].placementCycleId != jobEligibility[0].placementCycleId)
         return false;
+
     // -> Is Already Placed
     let b = true;
     for (const stage in hiringWrokflow)
