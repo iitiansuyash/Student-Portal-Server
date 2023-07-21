@@ -35,7 +35,7 @@ const createNewStudentData = (studentData: CreateStudentBody): Student => {
 }
 
 const createNewStudentProfile = (Data : any) : Student => {
-    let StudentData = new Student();
+    const StudentData = new Student();
 
     StudentData.admno =Data.admno
     StudentData.first_name = Data.name
@@ -58,7 +58,7 @@ const createNewStudentProfile = (Data : any) : Student => {
 }
 
 const createNewStudentPlacementEnrolmentCycle = (Data : any) : Placement_Cycle_Enrolment => {
-    let createNewStudentPlacementEnrolmentCycleData = new Placement_Cycle_Enrolment();
+    const createNewStudentPlacementEnrolmentCycleData = new Placement_Cycle_Enrolment();
 
     createNewStudentPlacementEnrolmentCycleData.placementCycleId = Data.placementCycleId as number
     createNewStudentPlacementEnrolmentCycleData.admno=Data.admno
@@ -67,7 +67,7 @@ const createNewStudentPlacementEnrolmentCycle = (Data : any) : Placement_Cycle_E
 }
 
 const createNewStudentStudiesSpecData = (Data : any) : Student_Studies_Spec => {
-    let StudentStudiesSpec = new Student_Studies_Spec();
+    const StudentStudiesSpec = new Student_Studies_Spec();
 
     StudentStudiesSpec.isParent = 0
     StudentStudiesSpec.marksheetLink = "marksheetLink"
@@ -80,24 +80,24 @@ const createNewStudentStudiesSpecData = (Data : any) : Student_Studies_Spec => {
 }
 
 const createNewStudentcvsData = (Data : any) : Student_cvs => {
-    let createNewStudentcvsData = new Student_cvs();
+    const createStudentcvsData = new Student_cvs();
 
-    createNewStudentcvsData.cvLink = "link"
+    createStudentcvsData.cvLink = "link"
 
-    return createNewStudentcvsData;
+    return createStudentcvsData;
 }
 
 
 const createNewStudentGraduationData = (Data : any) : Graduation_Year => {
-    let createNewStudentGraduationData = new Graduation_Year();
+    const createStudentGraduationData = new Graduation_Year();
 
-    createNewStudentGraduationData.year = Data.graduationyear as string
+    createStudentGraduationData.year = Data.graduationyear as string
 
-    return createNewStudentGraduationData;
+    return createStudentGraduationData;
 }
 
 const createNewStudentEdu_History10Data = (Data : any) : Edu_History => {
-    let createNewStudentEdu_HistoryData = new Edu_History();
+    const createNewStudentEdu_HistoryData = new Edu_History();
 
     createNewStudentEdu_HistoryData.marksheetLink = "marksheetLink"
     createNewStudentEdu_HistoryData.cgpaValue = Data.class10cgpa==""?0:Data.class10cgpa as number
@@ -119,7 +119,7 @@ const createNewStudentEdu_History10Data = (Data : any) : Edu_History => {
 }
 
 const createNewStudentEdu_History12Data = (Data : any) : Edu_History => {
-    let createNewStudentEdu_HistoryData = new Edu_History();
+    const createNewStudentEdu_HistoryData = new Edu_History();
 
     createNewStudentEdu_HistoryData.marksheetLink = "marksheetLink"
     createNewStudentEdu_HistoryData.cgpaValue = Data.class12cgpa==""?0:Data.class12cgpa as number
@@ -173,7 +173,7 @@ export const createStudentProfile = async (
         const placementCycle = createNewStudentPlacementEnrolmentCycle(req.body)
         const graduation = createNewStudentGraduationData(req.body)
 
-        let student=createNewStudentProfile(req.body)
+        const student=createNewStudentProfile(req.body)
 
         student.cvs=[cv]
         student.edu_historys=[edu_history_10,edu_history_12]
