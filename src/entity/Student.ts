@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn, ManyToOne, JoinColumn, JoinTable } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm"
 import { IsNotEmpty } from "class-validator";
 import { Student_cvs } from "./Student_cvs";
 import { Student_Studies_Spec } from "./StudentStudiesSpec";
