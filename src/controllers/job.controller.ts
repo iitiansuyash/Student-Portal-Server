@@ -65,8 +65,6 @@ export const fetchJobByIdForStudent = async (
 
     // Student Info :
 
-    console.log(req['user'].admno)
-
 
     const studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
@@ -339,7 +337,6 @@ export const getApplicants = async (
 ): Promise<Notification_Form | void> => {
   try {
     const { jobId } = req.params;
-    console.log(jobId);
 
     const applicants = await AppDataSource.query(`
     SELECT nf_applications.cvId, nf_applications.admno, student.first_name, 

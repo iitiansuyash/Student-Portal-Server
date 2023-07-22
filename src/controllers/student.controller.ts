@@ -181,8 +181,6 @@ export const createStudentProfile = async (
         student.placementcycles=[placementCycle]
         student.graduatingYear=graduation
 
-        console.log(student)
-
         const newStudent = await userService.create(student);
 
         res.status(200).json({ success: true , message:"Profiled created successfully"});

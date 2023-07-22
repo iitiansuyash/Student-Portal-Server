@@ -186,9 +186,6 @@ export const isEligible = async (admno, jobId) => {
         and notification_form.nfId = ${jobId} 
       `)
 
-      console.log(jobEligibility)
-      console.log(studentInfo)
-
     // Eligibility Check :
 
     // -> PlacementCylce Eligibility 
