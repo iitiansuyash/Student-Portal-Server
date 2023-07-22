@@ -14,6 +14,7 @@ export const AppDataSource = new DataSource({
     entities: [__dirname + '/entity/**/*.{js,ts}'],
     migrations: [__dirname + '/migration/**/*.{js,ts}'],
     subscribers: [],
+    connectTimeout: 30000,
 })
 
 AppDataSource.initialize()
