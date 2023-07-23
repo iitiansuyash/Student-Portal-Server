@@ -33,7 +33,7 @@ export const remove = async (id: number): Promise<User | null> => {
     const user = await UserRepository.findOneBy({ id });
 
     if(user)
-    await UserRepository.softDelete(id);
+        await UserRepository.softDelete(id);
 
     return user;
 }
