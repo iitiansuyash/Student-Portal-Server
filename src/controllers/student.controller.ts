@@ -21,37 +21,36 @@ interface CreateStudentBody {
     uidValue: string,
 }
 
-const createNewStudentData = (studentData: CreateStudentBody) : Student => {
+const createNewStudentData = (studentData: CreateStudentBody): Student => {
     let student = new Student();
     student = { ...student, ...studentData };
     return student;
 }
 
 export const createStudentProfile = async (
-    req: Request, 
-    res: Response, 
-    next: NextFunction) : Promise<Student | void> => {
-        const admno = req.params?.admno;
+    req: Request,
+    res: Response,
+    next: NextFunction): Promise<Student | void> => {
+    const admno = req.params?.admno;
     try {
-        
+
         const student = await userService.fetchStudent(admno);
 
-        console.log(student)
 
-        res.status(200).json({ success: true});
+        res.status(200).json({ success: true });
     } catch (error) {
         return next(error);
     }
 }
 
-export const findStudentById = async (req: Request, res: Response, next: NextFunction) : Promise<Student | void> => {
+export const findStudentById = async (req: Request, res: Response, next: NextFunction): Promise<Student | void> => {
     const admno = req.params?.admno;
 
     try {
         const student = await userService.fetchStudent(admno);
 
-        if(!student)
-        return next('Student not found');
+        if (!student)
+            return next('Student not found');
 
         res.status(200).json({ success: true, student });
     } catch (error) {
@@ -59,7 +58,7 @@ export const findStudentById = async (req: Request, res: Response, next: NextFun
     }
 }
 
-export const createStudent = async (req: Request, res: Response, next: NextFunction) : Promise<Student | void> => {
+export const createStudent = async (req: Request, res: Response, next: NextFunction): Promise<Student | void> => {
     const studentData: CreateStudentBody = req.body;
 
     try {
@@ -71,7 +70,7 @@ export const createStudent = async (req: Request, res: Response, next: NextFunct
     }
 }
 
-export const fetchAllStudents = async (req: Request, res: Response, next: NextFunction) : Promise<Student | void> => {
+export const fetchAllStudents = async (req: Request, res: Response, next: NextFunction): Promise<Student | void> => {
     try {
         const students = await userService.findAll();
 
@@ -81,7 +80,7 @@ export const fetchAllStudents = async (req: Request, res: Response, next: NextFu
     }
 }
 
-export const createBulk = async (req: Request, res: Response, next: NextFunction) : Promise<Student[] | void> => {
+export const createBulk = async (req: Request, res: Response, next: NextFunction): Promise<Student[] | void> => {
     const students = req.body;
 
     try {
@@ -93,7 +92,7 @@ export const createBulk = async (req: Request, res: Response, next: NextFunction
     }
 }
 
-export const deleteStudent = async (req: Request, res: Response, next: NextFunction) : Promise<Student | void> => {
+export const deleteStudent = async (req: Request, res: Response, next: NextFunction): Promise<Student | void> => {
     const admno = req.params.admno;
 
     try {

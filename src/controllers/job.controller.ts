@@ -5,7 +5,7 @@ import { UserRequest } from "../middleware/isAuthorized";
 import { createNF, fetchNF, removeNF, updateNF, createApplication } from "../services/nf.service";
 import { NF_Applications } from "../entity/NF_Applications";
 import { NF_Shortlisting } from "../entity/NF_Shortlisting";
-import { _jobsForEnrolledCycles, isEligible, isApplied, isOpen, createNewNF, createEligibilityData, createStagesData} from "../services/job.service"
+import { _jobsForEnrolledCycles, isEligible, isApplied, isOpen, createNewNF, createEligibilityData, createStagesData } from "../services/job.service"
 
 
 export const fetchAllJobsForStudent = async (
@@ -65,7 +65,6 @@ export const fetchJobByIdForStudent = async (
 
     // Student Info :
 
-    console.log(req['user'].admno)
 
 
     const studentInfo = await AppDataSource.query(`
@@ -339,7 +338,6 @@ export const getApplicants = async (
 ): Promise<Notification_Form | void> => {
   try {
     const { jobId } = req.params;
-    console.log(jobId);
 
     const applicants = await AppDataSource.query(`
     SELECT nf_applications.cvId, nf_applications.admno, student.first_name, 

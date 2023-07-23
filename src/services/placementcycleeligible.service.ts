@@ -27,7 +27,6 @@ export const addEligibleStudentInBulk = async (eligible_students) => {
         student.admno = eligible_students[i].admno;
         cycleEligibleStudent.push(student);
     }
-    console.log(cycleEligibleStudent);
     return await Placement_Cycle_Eligible_Repository.save(cycleEligibleStudent);
 }
 
