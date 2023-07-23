@@ -14,7 +14,7 @@ export const createEligibleStudents = async (req: Request, res: Response, next: 
 
 export const fetchEligibleStudents = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let { pcId } = req.params;
+        const { pcId } = req.params;
         const eligible_students = await getEligbleStudents(parseInt(pcId));
         res.status(200).send({ success: true, eligible_students: eligible_students });
     } catch (error) {

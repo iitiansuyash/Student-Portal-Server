@@ -3,7 +3,11 @@ import { Placement_Cycle_Eligible_Repository } from "../repositories/placementcy
 
 
 export const getEligbleStudents = async (pcId: number) => {
-    return await Placement_Cycle_Eligible_Repository.find();
+    return await Placement_Cycle_Eligible_Repository.find({
+        where: {
+            placementCycleId: pcId
+        }
+    });
 }
 
 export const checkEligibleToApply = async (admno: string, pcId: number) => {
@@ -16,9 +20,9 @@ export const checkEligibleToApply = async (admno: string, pcId: number) => {
 }
 
 export const addEligibleStudentInBulk = async (eligible_students) => {
-    let cycleEligibleStudent: Placement_Cycle_Eligible[] = [];
+    const cycleEligibleStudent: Placement_Cycle_Eligible[] = [];
     for (let i = 0; i < eligible_students.length; i++) {
-        let student = new Placement_Cycle_Eligible();
+        const student = new Placement_Cycle_Eligible();
         student.placementCycleId = eligible_students[i].pcId;
         student.admno = eligible_students[i].admno;
         cycleEligibleStudent.push(student);
