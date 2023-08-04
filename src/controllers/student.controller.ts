@@ -34,10 +34,10 @@ const createNewStudentData = (studentData: CreateStudentBody): Student => {
     return student;
 }
 
-const createNewStudentProfile = (Data : any) : Student => {
+const createNewStudentProfile = (Data: any): Student => {
     const StudentData = new Student();
 
-    StudentData.admno =Data.admno
+    StudentData.admno = Data.admno
     StudentData.first_name = Data.name
     StudentData.middle_name = ""
     StudentData.last_name = ""
@@ -47,26 +47,26 @@ const createNewStudentProfile = (Data : any) : Student => {
     StudentData.gender = Data.gender
     StudentData.instiMailId = Data.email
     StudentData.personalMailId = Data.personalemail
-    StudentData.isPWD = Data.pwd=="No"?0:1
+    StudentData.isPWD = Data.pwd == "No" ? 0 : 1
     StudentData.category = Data.category
-    StudentData.isEWS = Data.ewsgeneral=="No"?0:1
+    StudentData.isEWS = Data.ewsgeneral == "No" ? 0 : 1
     StudentData.uidType = ""
     StudentData.uidValue = ""
-    StudentData.isRegistered=1
+    StudentData.isRegistered = 1
 
     return StudentData;
 }
 
-const createNewStudentPlacementEnrolmentCycle = (Data : any) : Placement_Cycle_Enrolment => {
+const createNewStudentPlacementEnrolmentCycle = (Data: any): Placement_Cycle_Enrolment => {
     const createNewStudentPlacementEnrolmentCycleData = new Placement_Cycle_Enrolment();
 
     createNewStudentPlacementEnrolmentCycleData.placementCycleId = Data.placementCycleId as number
-    createNewStudentPlacementEnrolmentCycleData.admno=Data.admno
+    createNewStudentPlacementEnrolmentCycleData.admno = Data.admno
 
     return createNewStudentPlacementEnrolmentCycleData;
 }
 
-const createNewStudentStudiesSpecData = (Data : any) : Student_Studies_Spec => {
+const createNewStudentStudiesSpecData = (Data: any): Student_Studies_Spec => {
     const StudentStudiesSpec = new Student_Studies_Spec();
 
     StudentStudiesSpec.isParent = 0
@@ -79,7 +79,7 @@ const createNewStudentStudiesSpecData = (Data : any) : Student_Studies_Spec => {
     return StudentStudiesSpec;
 }
 
-const createNewStudentcvsData = (Data : any) : Student_cvs => {
+const createNewStudentcvsData = (Data: any): Student_cvs => {
     const createStudentcvsData = new Student_cvs();
 
     createStudentcvsData.cvLink = "link"
@@ -88,7 +88,7 @@ const createNewStudentcvsData = (Data : any) : Student_cvs => {
 }
 
 
-const createNewStudentGraduationData = (Data : any) : Graduation_Year => {
+const createNewStudentGraduationData = (Data: any): Graduation_Year => {
     const createStudentGraduationData = new Graduation_Year();
 
     createStudentGraduationData.year = Data.graduationyear as string
@@ -96,14 +96,14 @@ const createNewStudentGraduationData = (Data : any) : Graduation_Year => {
     return createStudentGraduationData;
 }
 
-const createNewStudentEdu_History10Data = (Data : any) : Edu_History => {
+const createNewStudentEdu_History10Data = (Data: any): Edu_History => {
     const createNewStudentEdu_HistoryData = new Edu_History();
 
     createNewStudentEdu_HistoryData.marksheetLink = "marksheetLink"
-    createNewStudentEdu_HistoryData.cgpaValue = Data.class10cgpa==""?0:Data.class10cgpa as number
-    createNewStudentEdu_HistoryData.cgpaScale = Data.class10score==""?0:Data.class10score as number
+    createNewStudentEdu_HistoryData.cgpaValue = Data.class10cgpa == "" ? 0 : Data.class10cgpa as number
+    createNewStudentEdu_HistoryData.cgpaScale = Data.class10score == "" ? 0 : Data.class10score as number
     createNewStudentEdu_HistoryData.gradeEquivalent = Data.class10grade as string
-    createNewStudentEdu_HistoryData.percentEquivalent = Data.class10percentage==""?0:Data.class10percentage as number
+    createNewStudentEdu_HistoryData.percentEquivalent = Data.class10percentage == "" ? 0 : Data.class10percentage as number
     createNewStudentEdu_HistoryData.conversionProof = "marksheetLink"
     createNewStudentEdu_HistoryData.startYearMonth = Data.class10durationfrom as Date
     createNewStudentEdu_HistoryData.endYearMonth = Data.class10durationto as Date
@@ -118,14 +118,14 @@ const createNewStudentEdu_History10Data = (Data : any) : Edu_History => {
     return createNewStudentEdu_HistoryData;
 }
 
-const createNewStudentEdu_History12Data = (Data : any) : Edu_History => {
+const createNewStudentEdu_History12Data = (Data: any): Edu_History => {
     const createNewStudentEdu_HistoryData = new Edu_History();
 
     createNewStudentEdu_HistoryData.marksheetLink = "marksheetLink"
-    createNewStudentEdu_HistoryData.cgpaValue = Data.class12cgpa==""?0:Data.class12cgpa as number
-    createNewStudentEdu_HistoryData.cgpaScale = Data.class12score==""?0:Data.class12score as number
+    createNewStudentEdu_HistoryData.cgpaValue = Data.class12cgpa == "" ? 0 : Data.class12cgpa as number
+    createNewStudentEdu_HistoryData.cgpaScale = Data.class12score == "" ? 0 : Data.class12score as number
     createNewStudentEdu_HistoryData.gradeEquivalent = Data.class12grade as string
-    createNewStudentEdu_HistoryData.percentEquivalent =Data.class12percentage==""?0:Data.class12percentage as number
+    createNewStudentEdu_HistoryData.percentEquivalent = Data.class12percentage == "" ? 0 : Data.class12percentage as number
     createNewStudentEdu_HistoryData.conversionProof = "marksheetLink"
     createNewStudentEdu_HistoryData.startYearMonth = Data.class12durationfrom as Date
     createNewStudentEdu_HistoryData.endYearMonth = Data.class12durationto as Date
@@ -163,8 +163,8 @@ export const createStudentProfile = async (
         FROM placementcycle
         WHERE graduatingYear = ${req.body.graduationyear}`)
 
-        req.body["admno"]=admno
-        req.body["placementCycleId"]=placementCycleId[0].placementCycleId
+        req.body["admno"] = admno
+        req.body["placementCycleId"] = placementCycleId[0].placementCycleId
 
         const cv = createNewStudentcvsData(req.body)
         const edu_history_10 = createNewStudentEdu_History10Data(req.body)
@@ -173,50 +173,50 @@ export const createStudentProfile = async (
         const placementCycle = createNewStudentPlacementEnrolmentCycle(req.body)
         const graduation = createNewStudentGraduationData(req.body)
 
-        const student=createNewStudentProfile(req.body)
+        const student = createNewStudentProfile(req.body)
 
-        student.cvs=[cv]
-        student.edu_historys=[edu_history_10,edu_history_12]
-        student.specializations=[study]
-        student.placementcycles=[placementCycle]
-        student.graduatingYear=graduation
+        student.cvs = [cv]
+        student.edu_historys = [edu_history_10, edu_history_12]
+        student.specializations = [study]
+        student.placementcycles = [placementCycle]
+        student.graduatingYear = graduation
 
         const newStudent = await userService.create(student);
 
-        res.status(200).json({ success: true , message:"Profiled created successfully"});
+        res.status(200).json({ success: true, message: "Profiled created successfully" });
     } catch (error) {
         return next(error);
     }
 }
 
 export const fetchStudentProfile = async (
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
     next: NextFunction): Promise<Student | void> => {
-    
+
     const admno = req['user'].admno;
 
     try {
 
         const student_profile = await studentRepository
-        .createQueryBuilder("student")
-        .leftJoinAndSelect("student.graduatingYear", "graduation_year")
-        .leftJoinAndSelect("student.cvs", "student_cvs")
-        .leftJoinAndSelect("student.placementcycles", "placementcycle")
-        .leftJoinAndSelect("student.specializations", "student_studies_spec")
-        .leftJoinAndSelect("student.edu_historys", "edu_history")
-        .leftJoinAndSelect("student.semwise_gpas", "studies_semwise_cgpa")
-        .where("student.admno = :admno", { admno })
-        .getOne();
+            .createQueryBuilder("student")
+            .leftJoinAndSelect("student.graduatingYear", "graduation_year")
+            .leftJoinAndSelect("student.cvs", "student_cvs")
+            .leftJoinAndSelect("student.placementcycles", "placementcycle")
+            .leftJoinAndSelect("student.specializations", "student_studies_spec")
+            .leftJoinAndSelect("student.edu_historys", "edu_history")
+            .leftJoinAndSelect("student.semwise_gpas", "studies_semwise_cgpa")
+            .where("student.admno = :admno", { admno })
+            .getOne();
 
-        res.status(200).json({ success: true, student_profile : student_profile});
+        res.status(200).json({ success: true, student_profile: student_profile });
     } catch (error) {
         return next(error);
     }
 }
 
 export const findStudentById = async (req: Request, res: Response, next: NextFunction): Promise<Student | void> => {
-    
+
     const admno = req.params?.admno;
 
     try {
@@ -226,7 +226,7 @@ export const findStudentById = async (req: Request, res: Response, next: NextFun
         if (!student)
             return next('Student not found');
 
-        res.status(200).json({ success: true,message : student });
+        res.status(200).json({ success: true, message: student });
     } catch (error) {
         return next(error);
     }

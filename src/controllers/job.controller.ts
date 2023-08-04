@@ -5,7 +5,7 @@ import { UserRequest } from "../middleware/isAuthorized";
 import { createNF, fetchNF, removeNF, updateNF, createApplication } from "../services/nf.service";
 import { NF_Applications } from "../entity/NF_Applications";
 import { NF_Shortlisting } from "../entity/NF_Shortlisting";
-import { _jobsForEnrolledCycles, isEligible, isApplied, isOpen, createNewNF, createEligibilityData, createStagesData} from "../services/job.service"
+import { _jobsForEnrolledCycles, isEligible, isApplied, isOpen, createNewNF, createEligibilityData, createStagesData } from "../services/job.service"
 
 
 export const fetchAllJobsForStudent = async (
@@ -55,7 +55,7 @@ export const fetchJobByIdForStudent = async (
     `)
 
     const hiring_wrokflow = await AppDataSource.query(`
-      SELECT stages.seqNo, stageName, stageType, stageMode, isCompleted, isSelected, listtype, isFinalRound
+      SELECT stages.seqNo, stageName, stageType, stageModWe, isCompleted, isSelected, listtype, isFinalRound
       FROM nf_job_stages AS stages
       LEFT JOIN nf_shortlisting AS shortlist
       ON stages.seqNo = shortlist.seqNo and
@@ -64,8 +64,6 @@ export const fetchJobByIdForStudent = async (
     `)
 
     // Student Info :
-
-
     const studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
       FROM studentportal.student, studentportal.specialization, studentportal.student_studies_spec, studentportal.edu_history, studentportal.placement_cycle_enrolment

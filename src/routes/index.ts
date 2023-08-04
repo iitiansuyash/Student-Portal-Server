@@ -16,6 +16,7 @@ import departmentRoutes from './department.route';
 import acadYearRoutes from './acadYear.route';
 import disciplineRoutes from './discipline.route';
 import noticeRoutes from './notice.route';
+import placementCycleEligibleRoutes from './placementCycleEligible.routes';
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.use('/department', departmentRoutes);
 router.use('/acadyear', acadYearRoutes);
 router.use('/discipline', disciplineRoutes);
 router.use('/notice', noticeRoutes);
+router.use('/placementcycleeligible', placementCycleEligibleRoutes);
 
 export default router;
