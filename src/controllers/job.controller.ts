@@ -55,7 +55,7 @@ export const fetchJobByIdForStudent = async (
     `)
 
     const hiring_wrokflow = await AppDataSource.query(`
-      SELECT stages.seqNo, stageName, stageType, stageMode, isCompleted, isSelected, listtype, isFinalRound
+      SELECT stages.seqNo, stageName, stageType, stageModWe, isCompleted, isSelected, listtype, isFinalRound
       FROM nf_job_stages AS stages
       LEFT JOIN nf_shortlisting AS shortlist
       ON stages.seqNo = shortlist.seqNo and
@@ -64,9 +64,6 @@ export const fetchJobByIdForStudent = async (
     `)
 
     // Student Info :
-
-
-
     const studentInfo = await AppDataSource.query(`
       SELECT placementCycleId, gender, isPWD, isEWS, category, specName, student_studies_spec.cgpaValue, activeBacklogs, totalBacklogs, degreeId, percentEquivalent
       FROM studentportal.student, studentportal.specialization, studentportal.student_studies_spec, studentportal.edu_history, studentportal.placement_cycle_enrolment

@@ -18,6 +18,7 @@ export const validateStudent = async (
   //         return await userService.fetchUser(student.admno);
   //     }
   // }
+  
   if (student && password) {
     return await userService.fetchStudent(student.admno);
   }
