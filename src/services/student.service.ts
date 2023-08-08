@@ -1,5 +1,4 @@
 import { Student } from "../entity/Student";
-import { Edu_History } from "../entity/Edu_History";
 import { studentRepository } from "../repositories/student.repository"
 
 interface Query {
